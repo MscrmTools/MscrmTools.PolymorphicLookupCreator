@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolymorphicLookupCreator
+namespace MscrmTools.PolymorphicLookupCreator
 {
     /// <summary>
     /// This class can help you to store settings for your plugin

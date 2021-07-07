@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PolymorphicLookupCreator.AppCode
+namespace MscrmTools.PolymorphicLookupCreator.AppCode
 {
     public class SolutionInfo
     {

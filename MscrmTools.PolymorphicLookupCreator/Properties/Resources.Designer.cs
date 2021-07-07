@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PolymorphicLookupCreator.Properties {
+namespace MscrmTools.PolymorphicLookupCreator.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PolymorphicLookupCreator.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PolymorphicLookupCreator.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MscrmTools.PolymorphicLookupCreator.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,16 +57,6 @@ namespace PolymorphicLookupCreator.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap bullet_lightning {
-            get {
-                object obj = ResourceManager.GetObject("bullet_lightning", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -1,5 +1,5 @@
 ﻿
-namespace PolymorphicLookupCreator
+namespace MscrmTools.PolymorphicLookupCreator
 {
     partial class PluginControl
     {
@@ -62,7 +62,7 @@ namespace PolymorphicLookupCreator
             // 
             // tsbCreate
             // 
-            this.tsbCreate.Image = global::PolymorphicLookupCreator.Properties.Resources.lightning_add;
+            this.tsbCreate.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_add;
             this.tsbCreate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCreate.Name = "tsbCreate";
             this.tsbCreate.Size = new System.Drawing.Size(259, 29);
@@ -227,6 +227,7 @@ namespace PolymorphicLookupCreator
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PluginControl";
             this.Size = new System.Drawing.Size(931, 519);
+            this.Load += new System.EventHandler(this.PluginControl_Load);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);

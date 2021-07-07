@@ -1,6 +1,6 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
-using PolymorphicLookupCreator.AppCode;
+using MscrmTools.PolymorphicLookupCreator.AppCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace PolymorphicLookupCreator
+namespace MscrmTools.PolymorphicLookupCreator
 {
     public partial class PluginControl : PluginControlBase
     {
@@ -33,6 +33,11 @@ namespace PolymorphicLookupCreator
         private void cbbSolutions_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtPrefix.Text = $"{((AppCode.SolutionInfo)cbbSolutions.SelectedItem).Solution.GetAttributeValue<AliasedValue>("pub.customizationprefix").Value}_";
+        }
+
+        private void PluginControl_Load(object sender, EventArgs e)
+        {
+            ShowInfoNotification("Polymorphic Lookups are in preview. Use them with caution.", new Uri("https://powerapps.microsoft.com/en-us/blog/announcement-multi-table-lookups-are-now-available-as-a-preview/"));
         }
 
         private void ResetUi()

@@ -226,10 +226,8 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bullet_lightning.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\lightning_add.png" />
