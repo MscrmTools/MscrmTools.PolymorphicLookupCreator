@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 
 namespace MscrmTools.PolymorphicLookupCreator.AppCode
 {
@@ -39,7 +40,35 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
             LoadBaseLanguage();
         }
 
-        public Guid CreatePolymorphicLookup(string prefix, string displayName, string schemaName, string referencingEntity, string[] referencedEntities)
+        public void AddRelationship(string prefix, string polymorphicLookupName, EntityMetadata emd, EntityMetadata emdReferenced, string solutionUniqueName)
+        {
+            try
+            {
+                _service.Execute(new CreateOneToManyRequest
+                {
+                    Lookup = (LookupAttributeMetadata)emd.Attributes.First(a => a.LogicalName == polymorphicLookupName.ToLower()),
+                    OneToManyRelationship = new OneToManyRelationshipMetadata
+                    {
+                        SchemaName = $"{prefix}_{emd.LogicalName}_{emdReferenced.LogicalName}_{polymorphicLookupName}",
+                        ReferencedEntity = emdReferenced.LogicalName,
+                        ReferencedAttribute = emdReferenced.PrimaryIdAttribute,
+                        ReferencingEntity = emd.LogicalName,
+                        ReferencingAttribute = polymorphicLookupName
+                    },
+                    SolutionUniqueName = solutionUniqueName
+                });
+            }
+            catch (FaultException<OrganizationServiceFault> error)
+            {
+                if (error.Detail.ErrorCode == -2147192813)
+                {
+                    throw new Exception("This lookup is not a polymorphic lookup");
+                }
+                else throw;
+            }
+        }
+
+        public Guid CreatePolymorphicLookup(string prefix, string displayName, string schemaName, string referencingEntity, string[] referencedEntities, string solutionUniqueName)
         {
             var label = new LocalizedLabel()
             {
@@ -77,13 +106,38 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                             DisplayName = new Label(label, new LocalizedLabel[] {label}) ,
                             SchemaName = schemaName
                         }
-                    }
+                    },
+                    {
+                        "SolutionUniqueName", solutionUniqueName}
                 }
             };
 
             var response = _service.Execute(request);
 
             return new Guid(response.Results["AttributeId"].ToString());
+        }
+
+        public void DeleteAttribute(string polymorphicLookupName, string entity)
+        {
+            _service.Execute(new DeleteAttributeRequest
+            {
+                LogicalName = polymorphicLookupName,
+                EntityLogicalName = entity
+            });
+        }
+
+        public void DeleteRelationship(string polymorphicLookupName, EntityMetadata emd, string referencedEntity)
+        {
+            var relationship = emd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity == referencedEntity && r.ReferencingAttribute == polymorphicLookupName.ToLower());
+            if (relationship == null)
+            {
+                throw new Exception($"Unable to find relationship between entities {emd.LogicalName} and {referencedEntity} for lookup {polymorphicLookupName}");
+            }
+
+            _service.Execute(new DeleteRelationshipRequest
+            {
+                Name = relationship.SchemaName
+            });
         }
 
         public List<EntityInfo> GetAvailableEntitiesForRelationship(ConnectionDetail detail = null)
@@ -121,7 +175,78 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                 Properties = new MetadataPropertiesExpression
                 {
                     AllProperties = false,
-                    PropertyNames = { "DisplayName", "SchemaName", "LogicalName", "CanBePrimaryEntityInRelationship", "CanBeRelatedEntityInRelationship" }
+                    PropertyNames = { "DisplayName", "SchemaName", "LogicalName", "PrimaryIdAttribute", "CanBePrimaryEntityInRelationship", "CanBeRelatedEntityInRelationship", "Attributes", "OneToManyRelationships", "ManyToOneRelationships" }
+                },
+                AttributeQuery = new AttributeQueryExpression
+                {
+                    Properties = new MetadataPropertiesExpression
+                    {
+                        AllProperties = false,
+                        PropertyNames = { "DisplayName", "SchemaName", "LogicalName", "Targets" }
+                    },
+                    Criteria = new MetadataFilterExpression
+                    {
+                        Conditions =
+                        {
+                            new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, false),
+                            new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, AttributeTypeCode.Lookup)
+                        }
+                    }
+                }
+            };
+            RetrieveMetadataChangesRequest retrieveMetadataChangesRequest = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression,
+                ClientVersionStamp = null
+            };
+            var response = (RetrieveMetadataChangesResponse)_service.Execute(retrieveMetadataChangesRequest);
+
+            return response.EntityMetadata.Select(emd => new EntityInfo(emd)).OrderBy(e => e.Metadata.SchemaName).ToList();
+        }
+
+        public List<EntityMetadata> GetPolymorphicLookups()
+        {
+            EntityQueryExpression entityQueryExpression = new EntityQueryExpression
+            {
+                Criteria = new MetadataFilterExpression(LogicalOperator.And)
+                {
+                    Filters =
+                    {
+                        new MetadataFilterExpression(LogicalOperator.Or){
+                         Conditions =
+                        {
+                            new MetadataConditionExpression("CanBePrimaryEntityInRelationship", MetadataConditionOperator.Equals, true),
+                            new MetadataConditionExpression("CanBeRelatedEntityInRelationship", MetadataConditionOperator.Equals, true)
+                        }
+                        },
+                        new MetadataFilterExpression(LogicalOperator.And)
+                        {
+                            Conditions =
+                            {
+                                new MetadataConditionExpression("IsIntersect", MetadataConditionOperator.Equals, false)
+                            }
+                        }
+                    }
+                },
+                Properties = new MetadataPropertiesExpression
+                {
+                    AllProperties = false,
+                    PropertyNames = { "DisplayName", "SchemaName", "LogicalName" }
+                },
+                AttributeQuery = new AttributeQueryExpression
+                {
+                    Properties = new MetadataPropertiesExpression
+                    {
+                        AllProperties = false,
+                        PropertyNames = { "DisplayName", "SchemaName", "Targets" }
+                    },
+                    Criteria = new MetadataFilterExpression(LogicalOperator.And)
+                    {
+                        Conditions = {
+                            new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, false),
+                            new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, "Lookup")
+                        }
+                    }
                 }
             };
 
@@ -133,7 +258,7 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
 
             var response = (RetrieveMetadataChangesResponse)_service.Execute(retrieveMetadataChangesRequest);
 
-            return response.EntityMetadata.Select(emd => new EntityInfo(emd)).OrderBy(e => e.Metadata.SchemaName).ToList();
+            return response.EntityMetadata.Where(e => e.Attributes.Any(a => ((LookupAttributeMetadata)a).Targets.Length > 1)).OrderBy(e => e.SchemaName).ToList();
         }
 
         private void LoadBaseLanguage()

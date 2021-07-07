@@ -232,6 +232,12 @@
   <ItemGroup>
     <None Include="Resources\lightning_add.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lightning_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lightning_delete.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (
