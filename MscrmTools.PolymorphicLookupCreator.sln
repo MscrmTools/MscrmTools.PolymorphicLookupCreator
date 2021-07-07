@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscrmTools.PolymorphicLookupCreator", "MscrmTools.PolymorphicLookupCreator\MscrmTools.PolymorphicLookupCreator.csproj", "{2F2C11E3-C989-435C-ADD5-1BE3E7659B61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F2C11E3-C989-435C-ADD5-1BE3E7659B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F2C11E3-C989-435C-ADD5-1BE3E7659B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F2C11E3-C989-435C-ADD5-1BE3E7659B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F2C11E3-C989-435C-ADD5-1BE3E7659B61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {251B6730-145B-4325-80C9-8BB43456EF56}
+	EndGlobalSection
+EndGlobal

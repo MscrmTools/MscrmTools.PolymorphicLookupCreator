@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>MscrmTools.PolymorphicLookupCreator</id>
+    <version>1.0.0</version>
+    <title>Polymorphic Lookup Creator for XrmToolBox</title>
+    <authors>MscrmTools</authors>
+    <owners>MscrmTools</owners>
+    <projectUrl>https://github.com/MscrmTools/MscrmTools.PolymorphicLookupCreator</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/logo_0100.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Create the shiny new polymorphic lookups columns without a line of code</description>
+    <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
+    <copyright>Copyright 2021 MscrmTools</copyright>
+    <tags> XrmToolBox Tool Polymorphic Dataverse</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2021.6.51" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\MscrmTools.PolymorphicLookupCreator.dll" target="lib\net452\Plugins" />
+  </files>
+</package>
