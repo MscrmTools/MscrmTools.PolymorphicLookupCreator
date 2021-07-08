@@ -19,7 +19,7 @@ namespace MscrmTools.PolymorphicLookupCreator
         ExportMetadata("BackgroundColor", "Lavender"),
         ExportMetadata("PrimaryFontColor", "Black"),
         ExportMetadata("SecondaryFontColor", "Gray")]
-    public class Plugin : PluginBase
+    public class Plugin : PluginBase, IPayPalPlugin
     {
         /// <summary>
         /// Constructor
@@ -30,6 +30,10 @@ namespace MscrmTools.PolymorphicLookupCreator
             // hook into the event that will fire when an Assembly fails to resolve
             // AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
         }
+
+        public string DonationDescription => "Donation for Polymorphic Lookup Creator";
+
+        public string EmailAccount => "tanguy92@hotmail.com";
 
         public override IXrmToolBoxPluginControl GetControl()
         {

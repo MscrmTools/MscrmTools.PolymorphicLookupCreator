@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Create the shiny new polymorphic lookups columns without a line of code</description>
     <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
-    <releaseNotes>Added Update and Delete capability for polymorphic lookups</releaseNotes>
+    <releaseNotes>Added Github and PayPal integration</releaseNotes>
     <copyright>Copyright 2021 MscrmTools</copyright>
     <tags> XrmToolBox Tool Polymorphic Dataverse</tags>
     <dependencies>

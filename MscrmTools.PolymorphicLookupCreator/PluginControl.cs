@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace MscrmTools.PolymorphicLookupCreator
 {
-    public partial class PluginControl : PluginControlBase
+    public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin
     {
         private List<EntityInfo> metadata;
         private List<AppCode.SolutionInfo> solutions;
@@ -20,6 +21,14 @@ namespace MscrmTools.PolymorphicLookupCreator
         {
             InitializeComponent();
         }
+
+        public string DonationDescription => "Donation for Polymorphic Lookup Creator";
+
+        public string EmailAccount => "tanguy92@hotmail.com";
+
+        public string RepositoryName => "MscrmTools.PolymorphicLookupCreator";
+
+        public string UserName => "MscrmTools";
 
         /// <summary>
         /// This event occurs when the connection has been updated in XrmToolBox
