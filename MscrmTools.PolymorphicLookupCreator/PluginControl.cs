@@ -104,7 +104,10 @@ namespace MscrmTools.PolymorphicLookupCreator
 
         private void PluginControl_Resize(object sender, EventArgs e)
         {
-            tableLayoutPanel1.RowStyles[3] = new RowStyle(SizeType.Absolute, tableLayoutPanel1.Height - 240);
+            if (tableLayoutPanel1.Height >= 240)
+            {
+                tableLayoutPanel1.RowStyles[3] = new RowStyle(SizeType.Absolute, tableLayoutPanel1.Height - 240);
+            }
         }
 
         private void ResetUi()
