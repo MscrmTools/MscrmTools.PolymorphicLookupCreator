@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MscrmTools.PolymorphicLookupCreator.AppCode;
+using MscrmTools.PolymorphicLookupCreator.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,12 @@ namespace MscrmTools.PolymorphicLookupCreator
 {
     public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin
     {
+        private LookupAttributeMetadata currentAmd;
+        private EntityMetadata currentEmd;
+        private int currentSortColumn = -1;
+        private MetadataManager manager;
         private List<EntityInfo> metadata;
+        private List<ListViewItem> referencedTableItems;
         private List<AppCode.SolutionInfo> solutions;
 
         public PluginControl()
@@ -22,7 +28,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             InitializeComponent();
         }
 
-        public string DonationDescription => "Donation for Polymorphic Lookup Creator";
+        public string DonationDescription => "Donation for Polymorphic Lookup Manager";
 
         public string EmailAccount => "tanguy92@hotmail.com";
 
@@ -37,7 +43,7 @@ namespace MscrmTools.PolymorphicLookupCreator
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
 
-            ResetUi();
+            ResetUi(null, null);
         }
 
         private void cbbReferencingAttribute_SelectedIndexChanged(object sender, EventArgs e)
@@ -47,27 +53,32 @@ namespace MscrmTools.PolymorphicLookupCreator
                 foreach (var item in lvReferencedEntities.Items.Cast<ListViewItem>())
                 {
                     item.Checked = false;
+                    item.Tag = null;
                 }
 
                 txtSchemaName.Text = string.Empty;
-                txtDisplayName.Text = string.Empty;
                 txtSchemaName.ReadOnly = false;
+                txtDisplayName.TextChanged -= txtDisplayName_TextChanged;
+                txtDisplayName.Text = string.Empty;
                 txtDisplayName.ReadOnly = false;
+                txtDisplayName.TextChanged += txtDisplayName_TextChanged;
 
                 tsbCreate.Enabled = true;
                 tsbEdit.Enabled = false;
                 tsbDelete.Enabled = false;
 
+                currentAmd = null;
+
                 return;
             }
             if (cbbReferencingEntity.SelectedItem == null || cbbReferencingAttribute.SelectedItem == null) return;
 
-            var emd = metadata.First(x => x.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString());
-            var amd = (LookupAttributeMetadata)emd.Metadata.Attributes.First(x => x.SchemaName == cbbReferencingAttribute.SelectedItem.ToString());
+            currentEmd = metadata.First(x => x.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString()).Metadata;
+            currentAmd = (LookupAttributeMetadata)currentEmd.Attributes.First(x => x.SchemaName == cbbReferencingAttribute.SelectedItem.ToString());
 
-            txtSchemaName.Text = string.Join("_", amd.SchemaName.Split('_').Skip(1));
-            txtPrefix.Text = amd.SchemaName.Split('_')[0];
-            txtDisplayName.Text = amd.DisplayName?.UserLocalizedLabel?.Label;
+            txtSchemaName.Text = string.Join("_", currentAmd.SchemaName.Split('_').Skip(1));
+            txtPrefix.Text = currentAmd.SchemaName.Split('_')[0] + "_";
+            txtDisplayName.Text = currentAmd.DisplayName?.UserLocalizedLabel?.Label;
             txtSchemaName.ReadOnly = true;
             txtDisplayName.ReadOnly = true;
 
@@ -77,7 +88,31 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             foreach (var item in lvReferencedEntities.Items.Cast<ListViewItem>())
             {
-                item.Checked = amd.Targets.Contains(((EntityInfo)item.Tag).Metadata.LogicalName);
+                item.Checked = currentAmd.Targets.Contains(item.Text.ToLower());
+                if (!item.Checked) continue;
+
+                var referencedEmd = metadata.First(x => x.Metadata.LogicalName == item.Text.ToString().ToLower()).Metadata;
+                var omr = currentEmd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity.ToLower() == item.Text.ToLower() && r.ReferencingAttribute.ToLower() == currentAmd?.SchemaName?.ToLower());
+                if (omr != null)
+                {
+                    item.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text);
+                }
+                else
+                {
+                    if (txtPrefix.Text.Length == 0 || txtSchemaName.Text.Length == 0)
+                    {
+                        MessageBox.Show(this, @"Please define the Lookup schema name before configuring new relationship", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    omr = new OneToManyRelationshipMetadata
+                    {
+                        ReferencedEntity = item.Text,
+                        SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
+                        IsValidForAdvancedFind = true
+                    };
+                    item.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text) { IsNew = true };
+                }
             }
         }
 
@@ -85,11 +120,11 @@ namespace MscrmTools.PolymorphicLookupCreator
         {
             if (cbbReferencingEntity.SelectedItem == null) return;
 
-            var emd = metadata.First(x => x.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString());
+            currentEmd = metadata.First(x => x.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString()).Metadata;
 
             cbbReferencingAttribute.Items.Clear();
             cbbReferencingAttribute.Items.Add("<Create new polymorphic lookup>");
-            cbbReferencingAttribute.Items.AddRange(emd.Metadata.Attributes.Select(a => a.SchemaName).ToArray());
+            cbbReferencingAttribute.Items.AddRange(currentEmd.Attributes.Select(a => a.SchemaName).ToArray());
         }
 
         private void cbbSolutions_SelectedIndexChanged(object sender, EventArgs e)
@@ -97,9 +132,67 @@ namespace MscrmTools.PolymorphicLookupCreator
             txtPrefix.Text = $"{((AppCode.SolutionInfo)cbbSolutions.SelectedItem).Solution.GetAttributeValue<AliasedValue>("pub.customizationprefix").Value}_";
         }
 
+        private void lvReferencedEntities_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (currentSortColumn == -1)
+            {
+                lvReferencedEntities.Sorting = SortOrder.Descending;
+                currentSortColumn = e.Column;
+            }
+            else if (e.Column != currentSortColumn)
+            {
+                lvReferencedEntities.Sorting = SortOrder.Ascending;
+                currentSortColumn = e.Column;
+            }
+            else
+            {
+                lvReferencedEntities.Sorting = lvReferencedEntities.Sorting == SortOrder.Descending ? SortOrder.Ascending : SortOrder.Descending;
+            }
+            lvReferencedEntities.ListViewItemSorter = new ListViewItemComparer(e.Column, lvReferencedEntities.Sorting);
+            lvReferencedEntities.Sort();
+        }
+
+        private void lvReferencedEntities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvReferencedEntities.SelectedItems.Count == 0) return;
+
+            var lvi = lvReferencedEntities.SelectedItems.Cast<ListViewItem>().First();
+            var referencedEmd = metadata.First(x => x.Metadata.LogicalName == lvi.Text.ToString().ToLower()).Metadata;
+
+            if (txtPrefix.Text.Length == 0 || txtSchemaName.Text.Length == 0)
+            {
+                MessageBox.Show(this, @"Please define the Lookup schema name before configuring new relationship", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var omr = currentEmd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity?.ToLower() == lvi.Text.ToLower()
+            && r.ReferencingAttribute.ToLower() == $"{txtPrefix.Text}{txtSchemaName.Text}".ToLower());
+            if (omr != null)
+            {
+                lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text);
+            }
+            else
+            {
+                omr = new OneToManyRelationshipMetadata
+                {
+                    ReferencedEntity = lvi.Text,
+                    SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
+                    IsValidForAdvancedFind = true
+                };
+                lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text) { IsNew = true };
+            }
+
+            var ctrl = new RelationshipPanel((RelationshipInfo)lvi.Tag, manager.LanguageCode)
+            {
+                Dock = DockStyle.Fill
+            };
+            gbRelationship.Controls.Clear();
+            gbRelationship.Controls.Add(ctrl);
+        }
+
         private void PluginControl_Load(object sender, EventArgs e)
         {
-            ShowInfoNotification("Polymorphic Lookups are in preview. Use them with caution.", new Uri("https://powerapps.microsoft.com/en-us/blog/announcement-multi-table-lookups-are-now-available-as-a-preview/"));
+            ShowInfoNotification("Polymorphic Lookups are in preview.", new Uri("https://powerapps.microsoft.com/en-us/blog/announcement-multi-table-lookups-are-now-available-as-a-preview/"));
         }
 
         private void PluginControl_Resize(object sender, EventArgs e)
@@ -110,14 +203,28 @@ namespace MscrmTools.PolymorphicLookupCreator
             }
         }
 
-        private void ResetUi()
+        private void ResetUi(string action, string arg, bool partial = false)
         {
             // Empty controls
-            cbbSolutions.Items.Clear();
-            cbbReferencingEntity.Items.Clear();
-            cbbReferencingAttribute.Items.Clear();
-            lvReferencedEntities.Items.Clear();
-            txtPrefix.Text = string.Empty;
+            gbRelationship.Controls.Clear();
+
+            if (!partial)
+            {
+                cbbSolutions.Items.Clear();
+                cbbReferencingEntity.Items.Clear();
+            }
+
+            if (action != "UPDATE")
+            {
+                cbbReferencingAttribute.Items.Clear();
+            }
+
+            if (!partial)
+            {
+                lvReferencedEntities.Items.Clear();
+                txtPrefix.Text = string.Empty;
+                gbRelationship.Controls.Clear();
+            }
 
             txtDisplayName.TextChanged -= txtDisplayName_TextChanged;
             txtDisplayName.Text = string.Empty;
@@ -140,8 +247,8 @@ namespace MscrmTools.PolymorphicLookupCreator
                     bw.ReportProgress(0, "Loading metadata...");
 
                     // Reload metadata
-                    var mm = new MetadataManager(Service);
-                    metadata = mm.GetAvailableEntitiesForRelationship(ConnectionDetail);
+                    manager = new MetadataManager(Service);
+                    metadata = manager.GetAvailableEntitiesForRelationship(ConnectionDetail);
                 },
                 PostWorkCallBack = (evt) =>
                 {
@@ -153,19 +260,50 @@ namespace MscrmTools.PolymorphicLookupCreator
                     }
                     else
                     {
-                        cbbSolutions.Items.AddRange(solutions.ToArray());
-
-                        var a = metadata.Where(e => e.Metadata.CanBePrimaryEntityInRelationship.Value).Select(e => e.Metadata.SchemaName).ToArray();
-                        cbbReferencingEntity.Items.AddRange(a);
-                        lvReferencedEntities.Items.AddRange(metadata.Where(e => e.Metadata.CanBeRelatedEntityInRelationship.Value).Select(e => new ListViewItem(e.Metadata.SchemaName)
+                        if (!partial)
                         {
-                            Text = e.Metadata.SchemaName,
-                            SubItems =
-                {
-                   e.Metadata.SchemaName
-                },
-                            Tag = e
-                        }).ToArray());
+                            cbbSolutions.Items.AddRange(solutions.ToArray());
+
+                            var a = metadata.Where(e => e.Metadata.CanBePrimaryEntityInRelationship.Value).Select(e => e.Metadata.SchemaName).ToArray();
+                            cbbReferencingEntity.Items.AddRange(a);
+
+                            referencedTableItems = new List<ListViewItem>();
+                            referencedTableItems.AddRange(metadata.Where(e => e.Metadata.CanBeRelatedEntityInRelationship.Value).Select(e => new ListViewItem(e.Metadata.SchemaName)
+                            {
+                                Text = e.Metadata.SchemaName,
+                                SubItems =
+                                {
+                                    e.Metadata.SchemaName,
+                                    e.Metadata.DisplayName?.UserLocalizedLabel?.Label ?? "N/A"
+                                }
+                            }));
+
+                            lvReferencedEntities.Items.AddRange(referencedTableItems.ToArray());
+                        }
+                        else
+                        {
+                            if (action == "UPDATE" || action == "CREATE")
+                            {
+                                foreach (var item in lvReferencedEntities.Items.Cast<ListViewItem>())
+                                {
+                                    item.Tag = null;
+                                }
+                            }
+                            else
+                            {
+                                foreach (var item in lvReferencedEntities.Items.Cast<ListViewItem>())
+                                {
+                                    item.Checked = false;
+                                }
+                            }
+
+                            cbbReferencingEntity_SelectedIndexChanged(cbbReferencingEntity, new EventArgs());
+
+                            if (action == "CREATE" || action == "UPDATE")
+                            {
+                                cbbReferencingAttribute.SelectedIndex = cbbReferencingAttribute.FindStringExact(arg);
+                            }
+                        }
                     }
                 },
                 ProgressChanged = (evt) =>
@@ -209,7 +347,8 @@ namespace MscrmTools.PolymorphicLookupCreator
             }
 
             var referencing = metadata.First(m => m.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString()).Metadata.LogicalName;
-            var referenced = lvReferencedEntities.CheckedItems.Cast<ListViewItem>().Select(i => ((EntityInfo)i.Tag).Metadata.LogicalName).ToArray();
+            var referenced = lvReferencedEntities.CheckedItems.Cast<ListViewItem>().Select(i => i.Text.ToLower()).ToArray();
+            var rels = lvReferencedEntities.CheckedItems.Cast<ListViewItem>().Select(i => (RelationshipInfo)i.Tag).ToArray();
             var prefix = txtPrefix.Text;
             var display = txtDisplayName.Text;
             var schema = $"{txtPrefix.Text}{txtSchemaName.Text}";
@@ -220,8 +359,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 Message = "Creating Polymorphic Lookup",
                 Work = (bw, evt) =>
                 {
-                    var mm = new MetadataManager(Service);
-                    mm.CreatePolymorphicLookup(prefix, display, schema, referencing, referenced, solutionUniqueName);
+                    manager.CreatePolymorphicLookup(prefix, display, schema, referencing, referenced, rels, solutionUniqueName);
                 },
                 PostWorkCallBack = (evt) =>
                 {
@@ -235,6 +373,8 @@ namespace MscrmTools.PolymorphicLookupCreator
                     {
                         MessageBox.Show(this, @"Polymorphic Lookup has been created and added to the solution!", @"Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+
+                    ResetUi("CREATE", schema, true);
                 },
                 ProgressChanged = (evt) =>
                 {
@@ -257,8 +397,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 Message = "Deleting Lookup column...",
                 Work = (bw, evt) =>
                 {
-                    var mm = new MetadataManager(Service);
-                    mm.DeleteAttribute(amd.LogicalName, emd.Metadata.LogicalName);
+                    manager.DeleteAttribute(amd.LogicalName, emd.Metadata.LogicalName);
                 },
                 PostWorkCallBack = (evt) =>
                 {
@@ -270,7 +409,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                     }
                     else
                     {
-                        ResetUi();
+                        ResetUi("DELETE", null, true);
                     }
                 },
                 ProgressChanged = (evt) =>
@@ -290,7 +429,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             var currentTargets = amd.Targets.ToList();
 
             var newTargets = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
-                .Select(x => ((EntityInfo)x.Tag).Metadata.LogicalName)
+                .Select(x => x.Text.ToLower())
                 .ToList();
 
             if (newTargets.Count == 0)
@@ -301,14 +440,22 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             var toDeleteList = currentTargets.Except(newTargets).ToList();
             var toAddList = newTargets.Except(currentTargets).ToList();
+            var toCreateList = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
+                .Where(i => toAddList.Contains(i.Text) && i.Tag != null && ((RelationshipInfo)i.Tag).IsNew)
+                .Select(i => ((RelationshipInfo)i.Tag).Relation)
+                .ToList();
+            var toUpdateList = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
+                .Where(i => i.Tag != null && !((RelationshipInfo)i.Tag).IsNew && ((RelationshipInfo)i.Tag).IsUpdated)
+                .Select(i => ((RelationshipInfo)i.Tag).Relation)
+                .ToList();
 
-            if (toDeleteList.Count == 0 && toAddList.Count == 0)
+            if (toDeleteList.Count == 0 && toAddList.Count == 0 && toUpdateList.Count == 0)
             {
                 MessageBox.Show(this, @"No changes detected", @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            var result = MessageBox.Show(this, $"Do you conform you want to {(toAddList.Count == 0 ? "" : $"\nAdd relations to the following entities:\n- {string.Join("\n- ", toAddList)}")}{(toDeleteList.Count == 0 ? "" : $"\nRemove relations for the following entities:\n- {string.Join("\n- ", toDeleteList)}")}", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(this, $"Do you conform you want to {(toAddList.Count == 0 ? "" : $"\nAdd relations to the following entities:\n- {string.Join("\n- ", toAddList)}")}{(toDeleteList.Count == 0 ? "" : $"\nRemove relations for the following entities:\n- {string.Join("\n- ", toDeleteList)}")}{(toUpdateList.Count == 0 ? "" : $"\nUpdate relations for the following entities:\n- {string.Join("\n- ", toUpdateList.Select(r => r.ReferencedEntity))}")}", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.No) return;
 
@@ -320,14 +467,12 @@ namespace MscrmTools.PolymorphicLookupCreator
                 Message = null,
                 Work = (bw, evt) =>
                 {
-                    var mm = new MetadataManager(Service);
-
                     if (toAddList.Count > 0)
                     {
                         bw.ReportProgress(0, "Adding relationship(s)...");
-                        foreach (var toAdd in toAddList)
+                        foreach (var toCreate in toCreateList)
                         {
-                            mm.AddRelationship(prefix, amd.LogicalName, emd.Metadata, metadata.First(x => x.Metadata.LogicalName == toAdd).Metadata, solutionUniqueName);
+                            manager.AddRelationship(prefix, amd.LogicalName, emd.Metadata, metadata.First(x => x.Metadata.LogicalName == toCreate.ReferencedEntity).Metadata, toCreate, solutionUniqueName);
                         }
                     }
 
@@ -336,7 +481,16 @@ namespace MscrmTools.PolymorphicLookupCreator
                         bw.ReportProgress(0, "Removing relationship(s)...");
                         foreach (var toDelete in toDeleteList)
                         {
-                            mm.DeleteRelationship(amd.LogicalName, emd.Metadata, metadata.First(x => x.Metadata.LogicalName == toDelete).Metadata.LogicalName);
+                            manager.DeleteRelationship(amd.LogicalName, emd.Metadata, metadata.First(x => x.Metadata.LogicalName == toDelete).Metadata.LogicalName);
+                        }
+                    }
+
+                    if (toUpdateList.Count > 0)
+                    {
+                        bw.ReportProgress(0, "Updating relationship(s)...");
+                        foreach (var toUpdate in toUpdateList)
+                        {
+                            manager.UpdateRelationship(toUpdate);
                         }
                     }
                 },
@@ -350,7 +504,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                     }
                     else
                     {
-                        ResetUi();
+                        ResetUi("UPDATE", null, true);
                     }
                 },
                 ProgressChanged = (evt) =>
@@ -383,7 +537,18 @@ namespace MscrmTools.PolymorphicLookupCreator
                 }
             }
 
-            txtSchemaName.Text = $"{newTemp}Id";
+            txtSchemaName.Text = $"{newTemp}{(newTemp.EndsWith("Id") ? "" : "Id")}";
+        }
+
+        private void txtTableSearch_TextChanged(object sender, EventArgs e)
+        {
+            var text = txtTableSearch.Text.ToLower();
+            var items = referencedTableItems.Where(i => text.Length == 0
+                    || i.Text.ToLower().Contains(text)
+                    || i.SubItems[1].Text.ToLower().Contains(text));
+
+            lvReferencedEntities.Items.Clear();
+            lvReferencedEntities.Items.AddRange(items.ToArray());
         }
     }
 }

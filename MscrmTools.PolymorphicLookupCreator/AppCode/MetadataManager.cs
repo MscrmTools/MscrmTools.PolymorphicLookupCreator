@@ -28,6 +28,97 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
         }
     }
 
+    public class RelationshipInfo
+    {
+        private readonly OneToManyRelationshipMetadata _cached;
+        private readonly OneToManyRelationshipMetadata _omr;
+
+        public RelationshipInfo(EntityMetadata referencedEntity, EntityMetadata referencingEntity, OneToManyRelationshipMetadata omr, string prefix)
+        {
+            _omr = omr;
+            _cached = new OneToManyRelationshipMetadata();
+
+            //if (IsNew)
+            //{
+            //    _omr.SchemaName = $"{prefix}_{referencingEntity.LogicalName}_{referencedEntity.LogicalName}_{polymorphicLookupName}";
+            //}
+
+            CacheInitialValues();
+        }
+
+        public bool IsNew { get; set; }
+
+        public bool IsUpdated
+        {
+            get
+            {
+                return _cached.SchemaName != _omr.SchemaName
+                  || _cached.AssociatedMenuConfiguration.Behavior != _omr.AssociatedMenuConfiguration.Behavior
+                  || _cached.AssociatedMenuConfiguration.Group != _omr.AssociatedMenuConfiguration.Group
+                  || (_cached.AssociatedMenuConfiguration.Order ?? 10000) != (_omr.AssociatedMenuConfiguration.Order ?? 10000)
+                  || (_cached.CascadeConfiguration.Assign ?? CascadeType.NoCascade) != (_omr.CascadeConfiguration.Assign ?? CascadeType.NoCascade)
+                  || (_cached.CascadeConfiguration.Delete ?? CascadeType.NoCascade) != (_omr.CascadeConfiguration.Delete ?? CascadeType.NoCascade)
+                  || (_cached.CascadeConfiguration.Merge ?? CascadeType.NoCascade) != (_omr.CascadeConfiguration.Merge ?? CascadeType.NoCascade)
+                  || (_cached.CascadeConfiguration.Reparent ?? CascadeType.NoCascade) != (_omr.CascadeConfiguration.Reparent ?? CascadeType.NoCascade)
+                  || (_cached.CascadeConfiguration.Share ?? CascadeType.NoCascade) != (_omr.CascadeConfiguration.Share ?? CascadeType.NoCascade)
+                  || (_cached.CascadeConfiguration.Unshare ?? CascadeType.NoCascade) != (_omr.CascadeConfiguration.Unshare ?? CascadeType.NoCascade)
+                  || (_cached.IsValidForAdvancedFind ?? false) != (_omr.IsValidForAdvancedFind ?? false)
+                  || _cached.AssociatedMenuConfiguration?.Label?.UserLocalizedLabel?.Label != _omr.AssociatedMenuConfiguration?.Label?.UserLocalizedLabel?.Label
+                  || AreLabelCollectionsDifferent(_cached.AssociatedMenuConfiguration?.Label?.LocalizedLabels, _omr.AssociatedMenuConfiguration?.Label?.LocalizedLabels);
+            }
+        }
+
+        public OneToManyRelationshipMetadata Relation
+        {
+            get
+            {
+                return _omr;
+            }
+        }
+
+        private bool AreLabelCollectionsDifferent(LocalizedLabelCollection c1, LocalizedLabelCollection c2)
+        {
+            if (c1 == null || c2 == null) return false;
+
+            return c1.Any(c => c2.FirstOrDefault(x => x.LanguageCode == c.LanguageCode && x.Label != c.Label) != null)
+                || c2.Any(c => c1.FirstOrDefault(x => x.LanguageCode == c.LanguageCode && x.Label != c.Label) != null)
+                || !c1.All(c => c2.FirstOrDefault(x => x.LanguageCode == c.LanguageCode) != null)
+                || !c2.All(c => c1.FirstOrDefault(x => x.LanguageCode == c.LanguageCode) != null);
+        }
+
+        private void CacheInitialValues()
+        {
+            _cached.SchemaName = _omr.SchemaName;
+            _cached.AssociatedMenuConfiguration = new AssociatedMenuConfiguration();
+            _cached.AssociatedMenuConfiguration.Behavior = _omr.AssociatedMenuConfiguration?.Behavior ?? new AssociatedMenuBehavior();
+            _cached.AssociatedMenuConfiguration.Group = _omr.AssociatedMenuConfiguration?.Group ?? AssociatedMenuGroup.Details;
+            _cached.AssociatedMenuConfiguration.Order = _omr.AssociatedMenuConfiguration?.Order ?? 10000;
+            _cached.CascadeConfiguration = new CascadeConfiguration();
+            _cached.CascadeConfiguration.Assign = _omr.CascadeConfiguration?.Assign ?? CascadeType.NoCascade;
+            _cached.CascadeConfiguration.Delete = _omr.CascadeConfiguration?.Delete ?? CascadeType.RemoveLink;
+            _cached.CascadeConfiguration.Merge = _omr.CascadeConfiguration?.Merge ?? CascadeType.NoCascade;
+            _cached.CascadeConfiguration.Reparent = _omr.CascadeConfiguration?.Reparent ?? CascadeType.NoCascade;
+            _cached.CascadeConfiguration.Share = _omr.CascadeConfiguration?.Share ?? CascadeType.NoCascade;
+            _cached.CascadeConfiguration.Unshare = _omr.CascadeConfiguration?.Unshare ?? CascadeType.NoCascade;
+            _cached.IsValidForAdvancedFind = _omr.IsValidForAdvancedFind;
+
+            _cached.AssociatedMenuConfiguration.Label = new Label();
+
+            if (_omr.AssociatedMenuConfiguration?.Label?.UserLocalizedLabel != null)
+            {
+                _cached.AssociatedMenuConfiguration.Label.UserLocalizedLabel = new LocalizedLabel(_omr.AssociatedMenuConfiguration.Label.UserLocalizedLabel.Label, _omr.AssociatedMenuConfiguration.Label.UserLocalizedLabel.LanguageCode);
+            }
+
+            if (_omr.AssociatedMenuConfiguration?.Label?.LocalizedLabels != null)
+            {
+                foreach (var lbl in _omr.AssociatedMenuConfiguration?.Label?.LocalizedLabels)
+                {
+                    _cached.AssociatedMenuConfiguration.Label.LocalizedLabels.Add(new LocalizedLabel(lbl.Label, lbl.LanguageCode));
+                }
+            }
+        }
+    }
+
     internal class MetadataManager
     {
         private readonly IOrganizationService _service;
@@ -40,21 +131,21 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
             LoadBaseLanguage();
         }
 
-        public void AddRelationship(string prefix, string polymorphicLookupName, EntityMetadata emd, EntityMetadata emdReferenced, string solutionUniqueName)
+        public int LanguageCode => languageCode;
+
+        public void AddRelationship(string prefix, string polymorphicLookupName, EntityMetadata emd, EntityMetadata emdReferenced, OneToManyRelationshipMetadata omd, string solutionUniqueName)
         {
             try
             {
+                omd.ReferencedEntity = emdReferenced.LogicalName;
+                omd.ReferencedAttribute = emdReferenced.PrimaryIdAttribute;
+                omd.ReferencingEntity = emd.LogicalName;
+                omd.ReferencingAttribute = polymorphicLookupName;
+
                 _service.Execute(new CreateOneToManyRequest
                 {
                     Lookup = (LookupAttributeMetadata)emd.Attributes.First(a => a.LogicalName == polymorphicLookupName.ToLower()),
-                    OneToManyRelationship = new OneToManyRelationshipMetadata
-                    {
-                        SchemaName = $"{prefix}_{emd.LogicalName}_{emdReferenced.LogicalName}_{polymorphicLookupName}",
-                        ReferencedEntity = emdReferenced.LogicalName,
-                        ReferencedAttribute = emdReferenced.PrimaryIdAttribute,
-                        ReferencingEntity = emd.LogicalName,
-                        ReferencingAttribute = polymorphicLookupName
-                    },
+                    OneToManyRelationship = omd,
                     SolutionUniqueName = solutionUniqueName
                 });
             }
@@ -68,7 +159,7 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
             }
         }
 
-        public Guid CreatePolymorphicLookup(string prefix, string displayName, string schemaName, string referencingEntity, string[] referencedEntities, string solutionUniqueName)
+        public Guid CreatePolymorphicLookup(string prefix, string displayName, string schemaName, string referencingEntity, string[] referencedEntities, RelationshipInfo[] rels, string solutionUniqueName)
         {
             var label = new LocalizedLabel()
             {
@@ -81,12 +172,17 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
             {
                 var referencedEntity = referencedEntities[i];
 
-                relations[i] = new OneToManyRelationshipMetadata
+                relations[i] = rels.FirstOrDefault(r => r?.Relation?.ReferencedEntity == referencedEntity)?.Relation;
+                if (relations[i] == null)
                 {
-                    SchemaName = $"{prefix}{referencingEntity}_{referencedEntity}_{schemaName}",
-                    ReferencedEntity = referencedEntity,
-                    ReferencingEntity = referencingEntity
-                };
+                    relations[i] = new OneToManyRelationshipMetadata
+                    {
+                        SchemaName = $"{prefix}{referencingEntity}_{referencedEntity}_{schemaName}",
+                        ReferencedEntity = referencedEntity
+                    };
+                }
+
+                relations[i].ReferencingEntity = referencingEntity;
 
                 if (relations[i].SchemaName.Length > 100)
                 {
@@ -259,6 +355,15 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
             var response = (RetrieveMetadataChangesResponse)_service.Execute(retrieveMetadataChangesRequest);
 
             return response.EntityMetadata.Where(e => e.Attributes.Any(a => ((LookupAttributeMetadata)a).Targets.Length > 1)).OrderBy(e => e.SchemaName).ToList();
+        }
+
+        internal void UpdateRelationship(OneToManyRelationshipMetadata toUpdate)
+        {
+            _service.Execute(new UpdateRelationshipRequest
+            {
+                Relationship = toUpdate,
+                MergeLabels = true
+            });
         }
 
         private void LoadBaseLanguage()

@@ -197,6 +197,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\MetadataManager.cs" />
     <Compile Include="AppCode\SolutionManager.cs" />
     <Compile Include="Plugin.cs" />
@@ -213,6 +214,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="UserControls\RelationshipPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RelationshipPanel.Designer.cs">
+      <DependentUpon>RelationshipPanel.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -227,6 +234,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RelationshipPanel.resx">
+      <DependentUpon>RelationshipPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
