@@ -91,7 +91,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 item.Checked = currentAmd.Targets.Contains(item.Text.ToLower());
                 if (!item.Checked) continue;
 
-                var referencedEmd = metadata.First(x => x.Metadata.LogicalName == item.Text.ToString().ToLower()).Metadata;
+                var referencedEmd = metadata.First(x => x.Metadata.LogicalName == item.Text.ToLower()).Metadata;
                 var omr = currentEmd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity.ToLower() == item.Text.ToLower() && r.ReferencingAttribute.ToLower() == currentAmd?.SchemaName?.ToLower());
                 if (omr != null)
                 {
@@ -107,7 +107,7 @@ namespace MscrmTools.PolymorphicLookupCreator
 
                     omr = new OneToManyRelationshipMetadata
                     {
-                        ReferencedEntity = item.Text,
+                        ReferencedEntity = item.Text.ToLower(),
                         SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
                         IsValidForAdvancedFind = true
                     };
@@ -152,6 +152,37 @@ namespace MscrmTools.PolymorphicLookupCreator
             lvReferencedEntities.Sort();
         }
 
+        private void lvReferencedEntities_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (!e.Item.Checked) return;
+
+            var lvi = e.Item;
+            var referencedEmd = metadata.First(x => x.Metadata.LogicalName == lvi.Text.ToString().ToLower()).Metadata;
+
+            if (txtPrefix.Text.Length == 0 || txtSchemaName.Text.Length == 0)
+            {
+                MessageBox.Show(this, @"Please define the Lookup schema name before configuring new relationship", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var omr = currentEmd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity?.ToLower() == lvi.Text.ToLower()
+            && r.ReferencingAttribute.ToLower() == $"{txtPrefix.Text}{txtSchemaName.Text}".ToLower());
+            if (omr != null)
+            {
+                lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text);
+            }
+            else
+            {
+                omr = new OneToManyRelationshipMetadata
+                {
+                    ReferencedEntity = lvi.Text.ToLower(),
+                    SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
+                    IsValidForAdvancedFind = true
+                };
+                lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text) { IsNew = true };
+            }
+        }
+
         private void lvReferencedEntities_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lvReferencedEntities.SelectedItems.Count == 0) return;
@@ -175,7 +206,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             {
                 omr = new OneToManyRelationshipMetadata
                 {
-                    ReferencedEntity = lvi.Text,
+                    ReferencedEntity = lvi.Text.ToLower(),
                     SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
                     IsValidForAdvancedFind = true
                 };
@@ -441,7 +472,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             var toDeleteList = currentTargets.Except(newTargets).ToList();
             var toAddList = newTargets.Except(currentTargets).ToList();
             var toCreateList = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
-                .Where(i => toAddList.Contains(i.Text) && i.Tag != null && ((RelationshipInfo)i.Tag).IsNew)
+                .Where(i => toAddList.Contains(i.Text.ToLower()) && i.Tag != null && ((RelationshipInfo)i.Tag).IsNew)
                 .Select(i => ((RelationshipInfo)i.Tag).Relation)
                 .ToList();
             var toUpdateList = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
@@ -504,7 +535,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                     }
                     else
                     {
-                        ResetUi("UPDATE", null, true);
+                        ResetUi("UPDATE", amd.SchemaName, true);
                     }
                 },
                 ProgressChanged = (evt) =>

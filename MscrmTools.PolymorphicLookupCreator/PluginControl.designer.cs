@@ -294,6 +294,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.lvReferencedEntities.UseCompatibleStateImageBehavior = false;
             this.lvReferencedEntities.View = System.Windows.Forms.View.Details;
             this.lvReferencedEntities.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvReferencedEntities_ColumnClick);
+            this.lvReferencedEntities.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvReferencedEntities_ItemChecked);
             this.lvReferencedEntities.SelectedIndexChanged += new System.EventHandler(this.lvReferencedEntities_SelectedIndexChanged);
             // 
             // chSchemaName
