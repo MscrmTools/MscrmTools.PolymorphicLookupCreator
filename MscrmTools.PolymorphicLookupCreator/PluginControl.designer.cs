@@ -38,17 +38,11 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblSolution = new System.Windows.Forms.Label();
             this.lblReferencingEntity = new System.Windows.Forms.Label();
-            this.lblReferencedEntities = new System.Windows.Forms.Label();
             this.lblLookupDisplayName = new System.Windows.Forms.Label();
             this.lblLookupSchemaName = new System.Windows.Forms.Label();
+            this.lblReferencedEntities = new System.Windows.Forms.Label();
             this.cbbSolutions = new System.Windows.Forms.ComboBox();
             this.cbbReferencingEntity = new System.Windows.Forms.ComboBox();
-            this.txtDisplayName = new System.Windows.Forms.TextBox();
-            this.pnlSchemaName = new System.Windows.Forms.Panel();
-            this.txtSchemaName = new System.Windows.Forms.TextBox();
-            this.txtPrefix = new System.Windows.Forms.TextBox();
-            this.lblReferencingAttribute = new System.Windows.Forms.Label();
-            this.cbbReferencingAttribute = new System.Windows.Forms.ComboBox();
             this.pnlReferencedEntities = new System.Windows.Forms.Panel();
             this.lvReferencedEntities = new System.Windows.Forms.ListView();
             this.chSchemaName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -56,13 +50,19 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtTableSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
+            this.lblReferencingAttribute = new System.Windows.Forms.Label();
+            this.cbbReferencingAttribute = new System.Windows.Forms.ComboBox();
+            this.txtDisplayName = new System.Windows.Forms.TextBox();
+            this.pnlSchemaName = new System.Windows.Forms.Panel();
+            this.txtSchemaName = new System.Windows.Forms.TextBox();
+            this.txtPrefix = new System.Windows.Forms.TextBox();
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.gbRelationship = new System.Windows.Forms.GroupBox();
             this.toolStripMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.pnlSchemaName.SuspendLayout();
             this.pnlReferencedEntities.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.pnlSchemaName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
             this.scMain.Panel2.SuspendLayout();
@@ -77,7 +77,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbDelete});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(1757, 46);
+            this.toolStripMenu.Size = new System.Drawing.Size(974, 31);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "tsMain";
             // 
@@ -87,7 +87,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbCreate.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_add;
             this.tsbCreate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCreate.Name = "tsbCreate";
-            this.tsbCreate.Size = new System.Drawing.Size(259, 29);
+            this.tsbCreate.Size = new System.Drawing.Size(183, 28);
             this.tsbCreate.Text = "Create Polymorphic Lookup";
             this.tsbCreate.Click += new System.EventHandler(this.tsbCreate_Click);
             // 
@@ -97,7 +97,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbEdit.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_go;
             this.tsbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbEdit.Name = "tsbEdit";
-            this.tsbEdit.Size = new System.Drawing.Size(160, 29);
+            this.tsbEdit.Size = new System.Drawing.Size(115, 28);
             this.tsbEdit.Text = "Apply Changes";
             this.tsbEdit.Click += new System.EventHandler(this.tsbEdit_Click);
             // 
@@ -107,97 +107,103 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbDelete.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_delete;
             this.tsbDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDelete.Name = "tsbDelete";
-            this.tsbDelete.Size = new System.Drawing.Size(90, 29);
+            this.tsbDelete.Size = new System.Drawing.Size(68, 28);
             this.tsbDelete.Text = "Delete";
             this.tsbDelete.Click += new System.EventHandler(this.tsbDelete_Click);
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.AutoSize = true;
             this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 133F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.Controls.Add(this.lblSolution, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblReferencingEntity, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lblReferencedEntities, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.lblLookupDisplayName, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.lblLookupSchemaName, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lblLookupDisplayName, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblLookupSchemaName, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblReferencedEntities, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.cbbSolutions, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.cbbReferencingEntity, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.txtDisplayName, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.pnlSchemaName, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.pnlReferencedEntities, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.lblReferencingAttribute, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.cbbReferencingAttribute, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.pnlReferencedEntities, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.txtDisplayName, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.pnlSchemaName, 1, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1293, 1124);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(511, 608);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // lblSolution
             // 
             this.lblSolution.AutoSize = true;
-            this.lblSolution.Location = new System.Drawing.Point(3, 0);
+            this.lblSolution.Location = new System.Drawing.Point(2, 0);
+            this.lblSolution.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSolution.Name = "lblSolution";
-            this.lblSolution.Size = new System.Drawing.Size(67, 20);
+            this.lblSolution.Size = new System.Drawing.Size(45, 13);
             this.lblSolution.TabIndex = 0;
             this.lblSolution.Text = "Solution";
             // 
             // lblReferencingEntity
             // 
             this.lblReferencingEntity.AutoSize = true;
-            this.lblReferencingEntity.Location = new System.Drawing.Point(3, 40);
+            this.lblReferencingEntity.Location = new System.Drawing.Point(2, 26);
+            this.lblReferencingEntity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblReferencingEntity.Name = "lblReferencingEntity";
-            this.lblReferencingEntity.Size = new System.Drawing.Size(139, 20);
+            this.lblReferencingEntity.Size = new System.Drawing.Size(95, 13);
             this.lblReferencingEntity.TabIndex = 1;
             this.lblReferencingEntity.Text = "Referencing Table";
-            // 
-            // lblReferencedEntities
-            // 
-            this.lblReferencedEntities.AutoSize = true;
-            this.lblReferencedEntities.Location = new System.Drawing.Point(3, 120);
-            this.lblReferencedEntities.Name = "lblReferencedEntities";
-            this.lblReferencedEntities.Size = new System.Drawing.Size(144, 20);
-            this.lblReferencedEntities.TabIndex = 2;
-            this.lblReferencedEntities.Text = "Referenced Tables";
             // 
             // lblLookupDisplayName
             // 
             this.lblLookupDisplayName.AutoSize = true;
-            this.lblLookupDisplayName.Location = new System.Drawing.Point(3, 1050);
+            this.lblLookupDisplayName.Location = new System.Drawing.Point(2, 78);
+            this.lblLookupDisplayName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLookupDisplayName.Name = "lblLookupDisplayName";
-            this.lblLookupDisplayName.Size = new System.Drawing.Size(161, 20);
+            this.lblLookupDisplayName.Size = new System.Drawing.Size(109, 13);
             this.lblLookupDisplayName.TabIndex = 3;
             this.lblLookupDisplayName.Text = "Lookup Display name";
             // 
             // lblLookupSchemaName
             // 
             this.lblLookupSchemaName.AutoSize = true;
-            this.lblLookupSchemaName.Location = new System.Drawing.Point(3, 1084);
+            this.lblLookupSchemaName.Location = new System.Drawing.Point(2, 104);
+            this.lblLookupSchemaName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLookupSchemaName.Name = "lblLookupSchemaName";
-            this.lblLookupSchemaName.Size = new System.Drawing.Size(169, 20);
+            this.lblLookupSchemaName.Size = new System.Drawing.Size(114, 13);
             this.lblLookupSchemaName.TabIndex = 4;
             this.lblLookupSchemaName.Text = "Lookup Schema name";
+            // 
+            // lblReferencedEntities
+            // 
+            this.lblReferencedEntities.AutoSize = true;
+            this.lblReferencedEntities.Location = new System.Drawing.Point(2, 130);
+            this.lblReferencedEntities.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblReferencedEntities.Name = "lblReferencedEntities";
+            this.lblReferencedEntities.Size = new System.Drawing.Size(98, 13);
+            this.lblReferencedEntities.TabIndex = 2;
+            this.lblReferencedEntities.Text = "Referenced Tables";
             // 
             // cbbSolutions
             // 
             this.cbbSolutions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbbSolutions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbSolutions.FormattingEnabled = true;
-            this.cbbSolutions.Location = new System.Drawing.Point(203, 3);
+            this.cbbSolutions.Location = new System.Drawing.Point(135, 2);
+            this.cbbSolutions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbbSolutions.Name = "cbbSolutions";
-            this.cbbSolutions.Size = new System.Drawing.Size(1087, 28);
+            this.cbbSolutions.Size = new System.Drawing.Size(374, 21);
             this.cbbSolutions.TabIndex = 6;
             this.cbbSolutions.SelectedIndexChanged += new System.EventHandler(this.cbbSolutions_SelectedIndexChanged);
             // 
@@ -206,76 +212,22 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.cbbReferencingEntity.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbbReferencingEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbReferencingEntity.FormattingEnabled = true;
-            this.cbbReferencingEntity.Location = new System.Drawing.Point(203, 43);
+            this.cbbReferencingEntity.Location = new System.Drawing.Point(135, 28);
+            this.cbbReferencingEntity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbbReferencingEntity.Name = "cbbReferencingEntity";
-            this.cbbReferencingEntity.Size = new System.Drawing.Size(1087, 28);
+            this.cbbReferencingEntity.Size = new System.Drawing.Size(374, 21);
             this.cbbReferencingEntity.TabIndex = 7;
             this.cbbReferencingEntity.SelectedIndexChanged += new System.EventHandler(this.cbbReferencingEntity_SelectedIndexChanged);
-            // 
-            // txtDisplayName
-            // 
-            this.txtDisplayName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDisplayName.Location = new System.Drawing.Point(203, 1053);
-            this.txtDisplayName.Name = "txtDisplayName";
-            this.txtDisplayName.Size = new System.Drawing.Size(1087, 26);
-            this.txtDisplayName.TabIndex = 8;
-            this.txtDisplayName.TextChanged += new System.EventHandler(this.txtDisplayName_TextChanged);
-            // 
-            // pnlSchemaName
-            // 
-            this.pnlSchemaName.Controls.Add(this.txtSchemaName);
-            this.pnlSchemaName.Controls.Add(this.txtPrefix);
-            this.pnlSchemaName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlSchemaName.Location = new System.Drawing.Point(203, 1087);
-            this.pnlSchemaName.Name = "pnlSchemaName";
-            this.pnlSchemaName.Size = new System.Drawing.Size(1087, 34);
-            this.pnlSchemaName.TabIndex = 11;
-            // 
-            // txtSchemaName
-            // 
-            this.txtSchemaName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSchemaName.Location = new System.Drawing.Point(100, 0);
-            this.txtSchemaName.Name = "txtSchemaName";
-            this.txtSchemaName.Size = new System.Drawing.Size(987, 26);
-            this.txtSchemaName.TabIndex = 1;
-            // 
-            // txtPrefix
-            // 
-            this.txtPrefix.Dock = System.Windows.Forms.DockStyle.Left;
-            this.txtPrefix.Location = new System.Drawing.Point(0, 0);
-            this.txtPrefix.Name = "txtPrefix";
-            this.txtPrefix.ReadOnly = true;
-            this.txtPrefix.Size = new System.Drawing.Size(100, 26);
-            this.txtPrefix.TabIndex = 0;
-            // 
-            // lblReferencingAttribute
-            // 
-            this.lblReferencingAttribute.AutoSize = true;
-            this.lblReferencingAttribute.Location = new System.Drawing.Point(3, 80);
-            this.lblReferencingAttribute.Name = "lblReferencingAttribute";
-            this.lblReferencingAttribute.Size = new System.Drawing.Size(70, 20);
-            this.lblReferencingAttribute.TabIndex = 12;
-            this.lblReferencingAttribute.Text = "Attribute";
-            // 
-            // cbbReferencingAttribute
-            // 
-            this.cbbReferencingAttribute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbReferencingAttribute.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbReferencingAttribute.FormattingEnabled = true;
-            this.cbbReferencingAttribute.Location = new System.Drawing.Point(203, 83);
-            this.cbbReferencingAttribute.Name = "cbbReferencingAttribute";
-            this.cbbReferencingAttribute.Size = new System.Drawing.Size(1087, 28);
-            this.cbbReferencingAttribute.TabIndex = 13;
-            this.cbbReferencingAttribute.SelectedIndexChanged += new System.EventHandler(this.cbbReferencingAttribute_SelectedIndexChanged);
             // 
             // pnlReferencedEntities
             // 
             this.pnlReferencedEntities.Controls.Add(this.lvReferencedEntities);
             this.pnlReferencedEntities.Controls.Add(this.panel1);
             this.pnlReferencedEntities.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlReferencedEntities.Location = new System.Drawing.Point(203, 123);
+            this.pnlReferencedEntities.Location = new System.Drawing.Point(135, 132);
+            this.pnlReferencedEntities.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlReferencedEntities.Name = "pnlReferencedEntities";
-            this.pnlReferencedEntities.Size = new System.Drawing.Size(1087, 924);
+            this.pnlReferencedEntities.Size = new System.Drawing.Size(374, 474);
             this.pnlReferencedEntities.TabIndex = 14;
             // 
             // lvReferencedEntities
@@ -287,9 +239,10 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.lvReferencedEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvReferencedEntities.FullRowSelect = true;
             this.lvReferencedEntities.HideSelection = false;
-            this.lvReferencedEntities.Location = new System.Drawing.Point(0, 32);
+            this.lvReferencedEntities.Location = new System.Drawing.Point(0, 21);
+            this.lvReferencedEntities.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lvReferencedEntities.Name = "lvReferencedEntities";
-            this.lvReferencedEntities.Size = new System.Drawing.Size(1087, 892);
+            this.lvReferencedEntities.Size = new System.Drawing.Size(374, 453);
             this.lvReferencedEntities.TabIndex = 12;
             this.lvReferencedEntities.UseCompatibleStateImageBehavior = false;
             this.lvReferencedEntities.View = System.Windows.Forms.View.Details;
@@ -313,16 +266,18 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.panel1.Controls.Add(this.lblSearch);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1087, 32);
+            this.panel1.Size = new System.Drawing.Size(374, 21);
             this.panel1.TabIndex = 0;
             // 
             // txtTableSearch
             // 
             this.txtTableSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtTableSearch.Location = new System.Drawing.Point(86, 0);
+            this.txtTableSearch.Location = new System.Drawing.Point(57, 0);
+            this.txtTableSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtTableSearch.Name = "txtTableSearch";
-            this.txtTableSearch.Size = new System.Drawing.Size(1001, 26);
+            this.txtTableSearch.Size = new System.Drawing.Size(317, 20);
             this.txtTableSearch.TabIndex = 1;
             this.txtTableSearch.TextChanged += new System.EventHandler(this.txtTableSearch_TextChanged);
             // 
@@ -330,18 +285,82 @@ namespace MscrmTools.PolymorphicLookupCreator
             // 
             this.lblSearch.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblSearch.Location = new System.Drawing.Point(0, 0);
+            this.lblSearch.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(86, 32);
+            this.lblSearch.Size = new System.Drawing.Size(57, 21);
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Search:";
             this.lblSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblReferencingAttribute
+            // 
+            this.lblReferencingAttribute.AutoSize = true;
+            this.lblReferencingAttribute.Location = new System.Drawing.Point(2, 52);
+            this.lblReferencingAttribute.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblReferencingAttribute.Name = "lblReferencingAttribute";
+            this.lblReferencingAttribute.Size = new System.Drawing.Size(46, 13);
+            this.lblReferencingAttribute.TabIndex = 12;
+            this.lblReferencingAttribute.Text = "Attribute";
+            // 
+            // cbbReferencingAttribute
+            // 
+            this.cbbReferencingAttribute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbbReferencingAttribute.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbReferencingAttribute.FormattingEnabled = true;
+            this.cbbReferencingAttribute.Location = new System.Drawing.Point(135, 54);
+            this.cbbReferencingAttribute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbbReferencingAttribute.Name = "cbbReferencingAttribute";
+            this.cbbReferencingAttribute.Size = new System.Drawing.Size(374, 21);
+            this.cbbReferencingAttribute.TabIndex = 13;
+            this.cbbReferencingAttribute.SelectedIndexChanged += new System.EventHandler(this.cbbReferencingAttribute_SelectedIndexChanged);
+            // 
+            // txtDisplayName
+            // 
+            this.txtDisplayName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtDisplayName.Location = new System.Drawing.Point(135, 80);
+            this.txtDisplayName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDisplayName.Name = "txtDisplayName";
+            this.txtDisplayName.Size = new System.Drawing.Size(374, 20);
+            this.txtDisplayName.TabIndex = 8;
+            this.txtDisplayName.TextChanged += new System.EventHandler(this.txtDisplayName_TextChanged);
+            // 
+            // pnlSchemaName
+            // 
+            this.pnlSchemaName.Controls.Add(this.txtSchemaName);
+            this.pnlSchemaName.Controls.Add(this.txtPrefix);
+            this.pnlSchemaName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlSchemaName.Location = new System.Drawing.Point(135, 106);
+            this.pnlSchemaName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlSchemaName.Name = "pnlSchemaName";
+            this.pnlSchemaName.Size = new System.Drawing.Size(374, 22);
+            this.pnlSchemaName.TabIndex = 11;
+            // 
+            // txtSchemaName
+            // 
+            this.txtSchemaName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSchemaName.Location = new System.Drawing.Point(68, 0);
+            this.txtSchemaName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSchemaName.Name = "txtSchemaName";
+            this.txtSchemaName.Size = new System.Drawing.Size(306, 20);
+            this.txtSchemaName.TabIndex = 1;
+            // 
+            // txtPrefix
+            // 
+            this.txtPrefix.Dock = System.Windows.Forms.DockStyle.Left;
+            this.txtPrefix.Location = new System.Drawing.Point(0, 0);
+            this.txtPrefix.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPrefix.Name = "txtPrefix";
+            this.txtPrefix.ReadOnly = true;
+            this.txtPrefix.Size = new System.Drawing.Size(68, 20);
+            this.txtPrefix.TabIndex = 0;
             // 
             // scMain
             // 
             this.scMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.scMain.IsSplitterFixed = true;
-            this.scMain.Location = new System.Drawing.Point(0, 55);
+            this.scMain.Location = new System.Drawing.Point(0, 31);
+            this.scMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.scMain.Name = "scMain";
             // 
             // scMain.Panel1
@@ -351,42 +370,43 @@ namespace MscrmTools.PolymorphicLookupCreator
             // scMain.Panel2
             // 
             this.scMain.Panel2.Controls.Add(this.gbRelationship);
-            this.scMain.Size = new System.Drawing.Size(1757, 1124);
-            this.scMain.SplitterDistance = 1293;
+            this.scMain.Size = new System.Drawing.Size(974, 608);
+            this.scMain.SplitterDistance = 511;
+            this.scMain.SplitterWidth = 3;
             this.scMain.TabIndex = 6;
             // 
             // gbRelationship
             // 
             this.gbRelationship.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbRelationship.Location = new System.Drawing.Point(0, 0);
+            this.gbRelationship.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gbRelationship.Name = "gbRelationship";
-            this.gbRelationship.Size = new System.Drawing.Size(460, 1124);
+            this.gbRelationship.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbRelationship.Size = new System.Drawing.Size(460, 608);
             this.gbRelationship.TabIndex = 0;
             this.gbRelationship.TabStop = false;
             this.gbRelationship.Text = "Relationship info (Select a relationship to display)";
             // 
             // PluginControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.toolStripMenu);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PluginControl";
-            this.Size = new System.Drawing.Size(1464, 983);
+            this.Size = new System.Drawing.Size(974, 639);
             this.Load += new System.EventHandler(this.PluginControl_Load);
             this.Resize += new System.EventHandler(this.PluginControl_Resize);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.pnlSchemaName.ResumeLayout(false);
-            this.pnlSchemaName.PerformLayout();
             this.pnlReferencedEntities.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.pnlSchemaName.ResumeLayout(false);
+            this.pnlSchemaName.PerformLayout();
             this.scMain.Panel1.ResumeLayout(false);
-            this.scMain.Panel1.PerformLayout();
             this.scMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).EndInit();
             this.scMain.ResumeLayout(false);
