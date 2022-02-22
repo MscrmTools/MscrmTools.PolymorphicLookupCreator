@@ -362,12 +362,6 @@ namespace MscrmTools.PolymorphicLookupCreator
                 return;
             }
 
-            if (referencedTableItems.Count(i => i.Checked) < 2)
-            {
-                MessageBox.Show(this, @"Please select at least two referenced entities", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             if (txtDisplayName.Text.Length == 0)
             {
                 MessageBox.Show(this, @"Please define a display name for the Lookup column", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
