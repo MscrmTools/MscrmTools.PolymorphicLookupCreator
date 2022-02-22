@@ -196,21 +196,24 @@ namespace MscrmTools.PolymorphicLookupCreator
                 return;
             }
 
-            var omr = currentEmd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity?.ToLower() == lvi.Text.ToLower()
-            && r.ReferencingAttribute.ToLower() == $"{txtPrefix.Text}{txtSchemaName.Text}".ToLower());
-            if (omr != null)
+            if (lvi.Tag == null)
             {
-                lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text);
-            }
-            else
-            {
-                omr = new OneToManyRelationshipMetadata
+                var omr = currentEmd.ManyToOneRelationships.FirstOrDefault(r => r.ReferencedEntity?.ToLower() == lvi.Text.ToLower()
+                && r.ReferencingAttribute.ToLower() == $"{txtPrefix.Text}{txtSchemaName.Text}".ToLower());
+                if (omr != null)
                 {
-                    ReferencedEntity = lvi.Text.ToLower(),
-                    SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
-                    IsValidForAdvancedFind = true
-                };
-                lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text) { IsNew = true };
+                    lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text);
+                }
+                else
+                {
+                    omr = new OneToManyRelationshipMetadata
+                    {
+                        ReferencedEntity = lvi.Text.ToLower(),
+                        SchemaName = $"{txtPrefix.Text}{currentEmd.LogicalName}_{referencedEmd.LogicalName}_{txtPrefix.Text}{txtSchemaName.Text}",
+                        IsValidForAdvancedFind = true
+                    };
+                    lvi.Tag = new RelationshipInfo(referencedEmd, currentEmd, omr, txtPrefix.Text) { IsNew = true };
+                }
             }
 
             var ctrl = new RelationshipPanel((RelationshipInfo)lvi.Tag, manager.LanguageCode)
