@@ -362,7 +362,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 return;
             }
 
-            if (lvReferencedEntities.CheckedItems.Count < 2)
+            if (referencedTableItems.Count(i => i.Checked) < 2)
             {
                 MessageBox.Show(this, @"Please select at least two referenced entities", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -381,8 +381,8 @@ namespace MscrmTools.PolymorphicLookupCreator
             }
 
             var referencing = metadata.First(m => m.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString()).Metadata.LogicalName;
-            var referenced = lvReferencedEntities.CheckedItems.Cast<ListViewItem>().Select(i => i.Text.ToLower()).ToArray();
-            var rels = lvReferencedEntities.CheckedItems.Cast<ListViewItem>().Select(i => (RelationshipInfo)i.Tag).ToArray();
+            var referenced = referencedTableItems.Where(i => i.Checked).Select(i => i.Text.ToLower()).ToArray();
+            var rels = referencedTableItems.Where(i => i.Checked).Select(i => (RelationshipInfo)i.Tag).ToArray();
             var prefix = txtPrefix.Text;
             var display = txtDisplayName.Text;
             var schema = $"{txtPrefix.Text}{txtSchemaName.Text}";
@@ -462,7 +462,7 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             var currentTargets = amd.Targets.ToList();
 
-            var newTargets = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
+            var newTargets = referencedTableItems.Where(i => i.Checked)
                 .Select(x => x.Text.ToLower())
                 .ToList();
 
@@ -474,11 +474,11 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             var toDeleteList = currentTargets.Except(newTargets).ToList();
             var toAddList = newTargets.Except(currentTargets).ToList();
-            var toCreateList = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
+            var toCreateList = referencedTableItems.Where(i => i.Checked)
                 .Where(i => toAddList.Contains(i.Text.ToLower()) && i.Tag != null && ((RelationshipInfo)i.Tag).IsNew)
                 .Select(i => ((RelationshipInfo)i.Tag).Relation)
                 .ToList();
-            var toUpdateList = lvReferencedEntities.CheckedItems.Cast<ListViewItem>()
+            var toUpdateList = referencedTableItems.Where(i => i.Checked)
                 .Where(i => i.Tag != null && !((RelationshipInfo)i.Tag).IsNew && ((RelationshipInfo)i.Tag).IsUpdated)
                 .Select(i => ((RelationshipInfo)i.Tag).Relation)
                 .ToList();
