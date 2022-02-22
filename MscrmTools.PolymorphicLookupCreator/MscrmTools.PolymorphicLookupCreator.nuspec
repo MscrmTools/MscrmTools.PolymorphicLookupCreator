@@ -11,7 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Create the shiny new polymorphic lookups columns without a line of code</description>
     <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
-    <releaseNotes>Fixed issue #2 : Add new entity to existing lookup</releaseNotes>
+    <releaseNotes>
+      Fixed issue #4 Relationship name is overwritten with default value
+      Reorganized controls order
+      Handles correctly selection of relationships when filter is applied
+      Allow to create a polymorphic lookup with only on target
+    </releaseNotes>
     <copyright>Copyright 2021 MscrmTools</copyright>
     <tags> XrmToolBox Tool Polymorphic Dataverse</tags>
     <dependencies>
