@@ -130,6 +130,11 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             txtCustomLabel.Visible = cbbDisplayBehavior.SelectedIndex == 1;
             lblCustomlabel.Visible = cbbDisplayBehavior.SelectedIndex == 1;
 
+            if (_ri.Relation.AssociatedMenuConfiguration == null)
+            {
+                _ri.Relation.AssociatedMenuConfiguration = new AssociatedMenuConfiguration();
+            }
+
             _ri.Relation.AssociatedMenuConfiguration.Behavior = cbbDisplayBehavior.SelectedIndex == 0 ?
                 AssociatedMenuBehavior.UseCollectionName : cbbDisplayBehavior.SelectedIndex == 1 ?
                 AssociatedMenuBehavior.UseLabel : AssociatedMenuBehavior.DoNotDisplay;
