@@ -483,7 +483,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 return;
             }
 
-            var result = MessageBox.Show(this, $"Do you conform you want to {(toAddList.Count == 0 ? "" : $"\nAdd relations to the following entities:\n- {string.Join("\n- ", toAddList)}")}{(toDeleteList.Count == 0 ? "" : $"\nRemove relations for the following entities:\n- {string.Join("\n- ", toDeleteList)}")}{(toUpdateList.Count == 0 ? "" : $"\nUpdate relations for the following entities:\n- {string.Join("\n- ", toUpdateList.Select(r => r.ReferencedEntity))}")}", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(this, $"Do you confirm you want to {(toAddList.Count == 0 ? "" : $"\nAdd relations to the following entities:\n- {string.Join("\n- ", toAddList)}")}{(toDeleteList.Count == 0 ? "" : $"\nRemove relations for the following entities:\n- {string.Join("\n- ", toDeleteList)}")}{(toUpdateList.Count == 0 ? "" : $"\nUpdate relations for the following entities:\n- {string.Join("\n- ", toUpdateList.Select(r => r.ReferencedEntity))}")}", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.No) return;
 
