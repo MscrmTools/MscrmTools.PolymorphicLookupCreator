@@ -12,10 +12,8 @@
     <description>Create the shiny new polymorphic lookups columns without a line of code</description>
     <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
     <releaseNotes>
-      Fixed issue #4 Relationship name is overwritten with default value
-      Reorganized controls order
-      Handles correctly selection of relationships when filter is applied
-      Allow to create a polymorphic lookup with only on target
+      Fixed NullReferenceException when trying to set a custom label for a relationship
+      Fixed typo mistake in confirmation dialog when applying updates
     </releaseNotes>
     <copyright>Copyright 2021 MscrmTools</copyright>
     <tags> XrmToolBox Tool Polymorphic Dataverse</tags>
