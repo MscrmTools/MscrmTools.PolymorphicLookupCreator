@@ -216,7 +216,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 }
             }
 
-            var ctrl = new RelationshipPanel((RelationshipInfo)lvi.Tag, manager.LanguageCode)
+            var ctrl = new RelationshipPanel((RelationshipInfo)lvi.Tag, manager.LanguageCode, referencedEmd.DataProviderId.HasValue && !referencedEmd.DataProviderId.Equals(Guid.Empty))
             {
                 Dock = DockStyle.Fill
             };

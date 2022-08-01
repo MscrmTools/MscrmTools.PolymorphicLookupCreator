@@ -12,8 +12,7 @@
     <description>Create the shiny new polymorphic lookups columns without a line of code</description>
     <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
     <releaseNotes>
-      Fixed NullReferenceException when trying to set a custom label for a relationship
-      Fixed typo mistake in confirmation dialog when applying updates
+      Added "Cascade None" relationship behavior for message Delete when table is a virtual table
     </releaseNotes>
     <copyright>Copyright 2021 MscrmTools</copyright>
     <tags> XrmToolBox Tool Polymorphic Dataverse</tags>
