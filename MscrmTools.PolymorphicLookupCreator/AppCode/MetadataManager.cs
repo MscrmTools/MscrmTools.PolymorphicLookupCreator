@@ -271,7 +271,7 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                 Properties = new MetadataPropertiesExpression
                 {
                     AllProperties = false,
-                    PropertyNames = { "DisplayName", "SchemaName", "LogicalName", "PrimaryIdAttribute", "CanBePrimaryEntityInRelationship", "CanBeRelatedEntityInRelationship", "Attributes", "OneToManyRelationships", "ManyToOneRelationships", "DataProviderId" }
+                    PropertyNames = { "DisplayName", "SchemaName", "LogicalName", "PrimaryIdAttribute", "CanBePrimaryEntityInRelationship", "CanBeRelatedEntityInRelationship", "Attributes", "OneToManyRelationships", "ManyToOneRelationships" }
                 },
                 AttributeQuery = new AttributeQueryExpression
                 {

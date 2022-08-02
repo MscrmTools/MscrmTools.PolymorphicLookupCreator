@@ -9,26 +9,19 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
 {
     public partial class RelationshipPanel : UserControl
     {
-        private readonly bool _isVirtualTable;
         private readonly int _lcid;
         private readonly RelationshipInfo _ri;
 
-        public RelationshipPanel(RelationshipInfo ri, int lcid, bool isVirtualTable)
+        public RelationshipPanel(RelationshipInfo ri, int lcid)
         {
             _ri = ri;
             _lcid = lcid;
-            _isVirtualTable = isVirtualTable;
 
             InitializeComponent();
 
             foreach (var cbb in Controls.OfType<ComboBox>())
             {
                 cbb.SelectedIndex = 0;
-            }
-
-            if (isVirtualTable)
-            {
-                cbbCascadeDeleteBehavior.Items.Add("None");
             }
         }
 
@@ -85,7 +78,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
 
                 default:
                     cc.Assign = CascadeType.NoCascade;
-                    cc.Delete = _isVirtualTable ? CascadeType.NoCascade : CascadeType.RemoveLink;
+                    cc.Delete = CascadeType.NoCascade;
                     cc.Merge = CascadeType.NoCascade;
                     cc.Reparent = CascadeType.NoCascade;
                     cc.RollupView = CascadeType.NoCascade;

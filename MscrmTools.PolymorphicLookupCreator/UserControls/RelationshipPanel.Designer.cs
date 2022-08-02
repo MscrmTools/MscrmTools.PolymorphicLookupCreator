@@ -151,12 +151,13 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.cbbCascadeDeleteBehavior.Items.AddRange(new object[] {
             "All",
             "Remove link",
-            "Restrict"});
+            "Restrict",
+            "None"});
             this.cbbCascadeDeleteBehavior.Location = new System.Drawing.Point(0, 864);
             this.cbbCascadeDeleteBehavior.Name = "cbbCascadeDeleteBehavior";
             this.cbbCascadeDeleteBehavior.Size = new System.Drawing.Size(574, 28);
             this.cbbCascadeDeleteBehavior.TabIndex = 49;
-           // 
+            // 
             // lblCascadeDeleteBehavior
             // 
             this.lblCascadeDeleteBehavior.Dock = System.Windows.Forms.DockStyle.Top;
@@ -206,7 +207,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.cbbCascadeUnshareBehavior.Name = "cbbCascadeUnshareBehavior";
             this.cbbCascadeUnshareBehavior.Size = new System.Drawing.Size(574, 28);
             this.cbbCascadeUnshareBehavior.TabIndex = 45;
-           // 
+            // 
             // lblCascadeUnshareBehavior
             // 
             this.lblCascadeUnshareBehavior.Dock = System.Windows.Forms.DockStyle.Top;
@@ -281,7 +282,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.cbbCascadeBehavior.Name = "cbbCascadeBehavior";
             this.cbbCascadeBehavior.Size = new System.Drawing.Size(574, 28);
             this.cbbCascadeBehavior.TabIndex = 39;
-              // 
+            // 
             // lblCascadeBehavior
             // 
             this.lblCascadeBehavior.Dock = System.Windows.Forms.DockStyle.Top;
@@ -314,7 +315,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             0,
             0,
             0});
-              // 
+            // 
             // lblDisplayOrder
             // 
             this.lblDisplayOrder.Dock = System.Windows.Forms.DockStyle.Top;
@@ -339,7 +340,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.cbbDisplayZone.Name = "cbbDisplayZone";
             this.cbbDisplayZone.Size = new System.Drawing.Size(574, 28);
             this.cbbDisplayZone.TabIndex = 35;
-                // 
+            // 
             // lblDisplayZone
             // 
             this.lblDisplayZone.Dock = System.Windows.Forms.DockStyle.Top;
@@ -358,7 +359,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.txtCustomLabel.Size = new System.Drawing.Size(574, 26);
             this.txtCustomLabel.TabIndex = 33;
             this.txtCustomLabel.Visible = false;
-                // 
+            // 
             // lblCustomlabel
             // 
             this.lblCustomlabel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -383,7 +384,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.cbbDisplayBehavior.Name = "cbbDisplayBehavior";
             this.cbbDisplayBehavior.Size = new System.Drawing.Size(574, 28);
             this.cbbDisplayBehavior.TabIndex = 31;
-                  // 
+            // 
             // lblDisplayBehavior
             // 
             this.lblDisplayBehavior.Dock = System.Windows.Forms.DockStyle.Top;
@@ -404,7 +405,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
             this.chkIsValidForAdvancedFind.Size = new System.Drawing.Size(574, 35);
             this.chkIsValidForAdvancedFind.TabIndex = 29;
             this.chkIsValidForAdvancedFind.UseVisualStyleBackColor = true;
-                    // 
+            // 
             // lblIsValidForAdvancedFind
             // 
             this.lblIsValidForAdvancedFind.Dock = System.Windows.Forms.DockStyle.Top;
