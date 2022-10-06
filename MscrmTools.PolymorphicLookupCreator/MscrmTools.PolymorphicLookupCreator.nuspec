@@ -12,7 +12,7 @@
     <description>Create the shiny new polymorphic lookups columns without a line of code</description>
     <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
     <releaseNotes>
-      Added "Cascade None" relationship behavior for message Delete
+      Removing the preview notification message
     </releaseNotes>
     <copyright>Copyright 2021 MscrmTools</copyright>
     <tags> XrmToolBox Tool Polymorphic Dataverse</tags>

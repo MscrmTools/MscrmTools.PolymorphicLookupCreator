@@ -226,7 +226,6 @@ namespace MscrmTools.PolymorphicLookupCreator
 
         private void PluginControl_Load(object sender, EventArgs e)
         {
-            ShowInfoNotification("Polymorphic Lookups are in preview.", new Uri("https://powerapps.microsoft.com/en-us/blog/announcement-multi-table-lookups-are-now-available-as-a-preview/"));
         }
 
         private void PluginControl_Resize(object sender, EventArgs e)
