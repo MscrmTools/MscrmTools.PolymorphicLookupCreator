@@ -284,7 +284,8 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                     {
                         Conditions =
                         {
-                            new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, false),
+                            // You can create extra relations on managed lookups
+                            //new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, false),
                             new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, AttributeTypeCode.Lookup)
                         }
                     }
