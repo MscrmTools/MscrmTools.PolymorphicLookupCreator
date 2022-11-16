@@ -12,7 +12,7 @@
     <description>Create the shiny new polymorphic lookups columns without a line of code</description>
     <summary>Create the shiny new polymorphic lookups columns without a line of code</summary>
     <releaseNotes>
-      Removing the preview notification message
+      Added possibility to update managed lookup columns (#8 from @arsenico1987)
     </releaseNotes>
     <copyright>Copyright 2021 MscrmTools</copyright>
     <tags> XrmToolBox Tool Polymorphic Dataverse</tags>
