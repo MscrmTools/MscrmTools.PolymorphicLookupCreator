@@ -491,7 +491,7 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             WorkAsync(new WorkAsyncInfo
             {
-                Message = null,
+                Message = "Processing...",
                 Work = (bw, evt) =>
                 {
                     if (toAddList.Count > 0)
