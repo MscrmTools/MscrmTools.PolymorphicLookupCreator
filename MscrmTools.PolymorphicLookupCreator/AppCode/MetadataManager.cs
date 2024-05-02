@@ -159,7 +159,7 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
             }
         }
 
-        public Guid CreatePolymorphicLookup(string prefix, string displayName, string schemaName, string referencingEntity, string[] referencedEntities, RelationshipInfo[] rels, string solutionUniqueName)
+        public Guid CreatePolymorphicLookup(string prefix, string displayName, string schemaName, string referencingEntity, string[] referencedEntities, RelationshipInfo[] rels, string solutionUniqueName, bool isElasticTable)
         {
             var label = new LocalizedLabel()
             {
@@ -178,8 +178,23 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                     relations[i] = new OneToManyRelationshipMetadata
                     {
                         SchemaName = $"{prefix}{referencingEntity}_{referencedEntity}_{schemaName}",
-                        ReferencedEntity = referencedEntity
+                        ReferencedEntity = referencedEntity,
                     };
+
+                    if(isElasticTable)
+                    {
+                        relations[i].CascadeConfiguration = new CascadeConfiguration
+                        {
+                            Archive = CascadeType.NoCascade,
+                            Assign = CascadeType.NoCascade,
+                            Delete = CascadeType.NoCascade,
+                            Merge = CascadeType.NoCascade,
+                            Reparent = CascadeType.NoCascade,
+                            RollupView = CascadeType.NoCascade,
+                            Share = CascadeType.NoCascade,
+                            Unshare = CascadeType.NoCascade,
+                        };
+                    }
                 }
 
                 relations[i].ReferencingEntity = referencingEntity;
