@@ -78,7 +78,7 @@ namespace MscrmTools.PolymorphicLookupCreator.UserControls
 
                 default:
                     cc.Assign = CascadeType.NoCascade;
-                    cc.Delete = CascadeType.NoCascade;
+                    cc.Delete = CascadeType.RemoveLink;
                     cc.Merge = CascadeType.NoCascade;
                     cc.Reparent = CascadeType.NoCascade;
                     cc.RollupView = CascadeType.NoCascade;
