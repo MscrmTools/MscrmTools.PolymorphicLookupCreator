@@ -41,7 +41,6 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.lblLookupDisplayName = new System.Windows.Forms.Label();
             this.lblLookupSchemaName = new System.Windows.Forms.Label();
             this.lblReferencedEntities = new System.Windows.Forms.Label();
-            this.cbbSolutions = new System.Windows.Forms.ComboBox();
             this.cbbReferencingEntity = new System.Windows.Forms.ComboBox();
             this.pnlReferencedEntities = new System.Windows.Forms.Panel();
             this.lvReferencedEntities = new System.Windows.Forms.ListView();
@@ -58,6 +57,9 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.txtPrefix = new System.Windows.Forms.TextBox();
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.gbRelationship = new System.Windows.Forms.GroupBox();
+            this.pnlSolutionPicker = new System.Windows.Forms.Panel();
+            this.btnBrowseSolutions = new System.Windows.Forms.Button();
+            this.txtSolution = new System.Windows.Forms.TextBox();
             this.toolStripMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlReferencedEntities.SuspendLayout();
@@ -67,6 +69,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.scMain.Panel1.SuspendLayout();
             this.scMain.Panel2.SuspendLayout();
             this.scMain.SuspendLayout();
+            this.pnlSolutionPicker.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripMenu
@@ -78,7 +81,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStripMenu.Size = new System.Drawing.Size(2192, 57);
+            this.toolStripMenu.Size = new System.Drawing.Size(1526, 34);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "tsMain";
             // 
@@ -88,7 +91,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbCreate.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_add;
             this.tsbCreate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCreate.Name = "tsbCreate";
-            this.tsbCreate.Size = new System.Drawing.Size(251, 52);
+            this.tsbCreate.Size = new System.Drawing.Size(259, 29);
             this.tsbCreate.Text = "Create Polymorphic Lookup";
             this.tsbCreate.Click += new System.EventHandler(this.tsbCreate_Click);
             // 
@@ -98,7 +101,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbEdit.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_go;
             this.tsbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbEdit.Name = "tsbEdit";
-            this.tsbEdit.Size = new System.Drawing.Size(152, 52);
+            this.tsbEdit.Size = new System.Drawing.Size(160, 29);
             this.tsbEdit.Text = "Apply Changes";
             this.tsbEdit.Click += new System.EventHandler(this.tsbEdit_Click);
             // 
@@ -108,7 +111,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tsbDelete.Image = global::MscrmTools.PolymorphicLookupCreator.Properties.Resources.lightning_delete;
             this.tsbDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDelete.Name = "tsbDelete";
-            this.tsbDelete.Size = new System.Drawing.Size(82, 52);
+            this.tsbDelete.Size = new System.Drawing.Size(90, 29);
             this.tsbDelete.Text = "Delete";
             this.tsbDelete.Click += new System.EventHandler(this.tsbDelete_Click);
             // 
@@ -124,13 +127,13 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tableLayoutPanel1.Controls.Add(this.lblLookupDisplayName, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.lblLookupSchemaName, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.lblReferencedEntities, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.cbbSolutions, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.cbbReferencingEntity, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.pnlReferencedEntities, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.lblReferencingAttribute, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.cbbReferencingAttribute, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.txtDisplayName, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.pnlSchemaName, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.pnlSolutionPicker, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -142,7 +145,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1729, 1389);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1063, 1004);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // lblSolution
@@ -190,17 +193,6 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.lblReferencedEntities.TabIndex = 2;
             this.lblReferencedEntities.Text = "Referenced Tables";
             // 
-            // cbbSolutions
-            // 
-            this.cbbSolutions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbSolutions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbSolutions.FormattingEnabled = true;
-            this.cbbSolutions.Location = new System.Drawing.Point(203, 3);
-            this.cbbSolutions.Name = "cbbSolutions";
-            this.cbbSolutions.Size = new System.Drawing.Size(1523, 28);
-            this.cbbSolutions.TabIndex = 6;
-            this.cbbSolutions.SelectedIndexChanged += new System.EventHandler(this.cbbSolutions_SelectedIndexChanged);
-            // 
             // cbbReferencingEntity
             // 
             this.cbbReferencingEntity.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -208,7 +200,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.cbbReferencingEntity.FormattingEnabled = true;
             this.cbbReferencingEntity.Location = new System.Drawing.Point(203, 43);
             this.cbbReferencingEntity.Name = "cbbReferencingEntity";
-            this.cbbReferencingEntity.Size = new System.Drawing.Size(1523, 28);
+            this.cbbReferencingEntity.Size = new System.Drawing.Size(857, 28);
             this.cbbReferencingEntity.TabIndex = 7;
             this.cbbReferencingEntity.SelectedIndexChanged += new System.EventHandler(this.cbbReferencingEntity_SelectedIndexChanged);
             // 
@@ -219,7 +211,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.pnlReferencedEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlReferencedEntities.Location = new System.Drawing.Point(203, 203);
             this.pnlReferencedEntities.Name = "pnlReferencedEntities";
-            this.pnlReferencedEntities.Size = new System.Drawing.Size(1523, 1183);
+            this.pnlReferencedEntities.Size = new System.Drawing.Size(857, 798);
             this.pnlReferencedEntities.TabIndex = 14;
             // 
             // lvReferencedEntities
@@ -233,7 +225,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.lvReferencedEntities.HideSelection = false;
             this.lvReferencedEntities.Location = new System.Drawing.Point(0, 32);
             this.lvReferencedEntities.Name = "lvReferencedEntities";
-            this.lvReferencedEntities.Size = new System.Drawing.Size(1523, 1151);
+            this.lvReferencedEntities.Size = new System.Drawing.Size(857, 766);
             this.lvReferencedEntities.TabIndex = 12;
             this.lvReferencedEntities.UseCompatibleStateImageBehavior = false;
             this.lvReferencedEntities.View = System.Windows.Forms.View.Details;
@@ -258,7 +250,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1523, 32);
+            this.panel1.Size = new System.Drawing.Size(857, 32);
             this.panel1.TabIndex = 0;
             // 
             // txtTableSearch
@@ -266,7 +258,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.txtTableSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTableSearch.Location = new System.Drawing.Point(86, 0);
             this.txtTableSearch.Name = "txtTableSearch";
-            this.txtTableSearch.Size = new System.Drawing.Size(1437, 26);
+            this.txtTableSearch.Size = new System.Drawing.Size(771, 26);
             this.txtTableSearch.TabIndex = 1;
             this.txtTableSearch.TextChanged += new System.EventHandler(this.txtTableSearch_TextChanged);
             // 
@@ -296,7 +288,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.cbbReferencingAttribute.FormattingEnabled = true;
             this.cbbReferencingAttribute.Location = new System.Drawing.Point(203, 83);
             this.cbbReferencingAttribute.Name = "cbbReferencingAttribute";
-            this.cbbReferencingAttribute.Size = new System.Drawing.Size(1523, 28);
+            this.cbbReferencingAttribute.Size = new System.Drawing.Size(857, 28);
             this.cbbReferencingAttribute.TabIndex = 13;
             this.cbbReferencingAttribute.SelectedIndexChanged += new System.EventHandler(this.cbbReferencingAttribute_SelectedIndexChanged);
             // 
@@ -305,7 +297,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.txtDisplayName.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtDisplayName.Location = new System.Drawing.Point(203, 123);
             this.txtDisplayName.Name = "txtDisplayName";
-            this.txtDisplayName.Size = new System.Drawing.Size(1523, 26);
+            this.txtDisplayName.Size = new System.Drawing.Size(857, 26);
             this.txtDisplayName.TabIndex = 8;
             this.txtDisplayName.TextChanged += new System.EventHandler(this.txtDisplayName_TextChanged);
             // 
@@ -316,7 +308,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.pnlSchemaName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlSchemaName.Location = new System.Drawing.Point(203, 163);
             this.pnlSchemaName.Name = "pnlSchemaName";
-            this.pnlSchemaName.Size = new System.Drawing.Size(1523, 34);
+            this.pnlSchemaName.Size = new System.Drawing.Size(857, 34);
             this.pnlSchemaName.TabIndex = 11;
             // 
             // txtSchemaName
@@ -324,7 +316,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.txtSchemaName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSchemaName.Location = new System.Drawing.Point(100, 0);
             this.txtSchemaName.Name = "txtSchemaName";
-            this.txtSchemaName.Size = new System.Drawing.Size(1423, 26);
+            this.txtSchemaName.Size = new System.Drawing.Size(757, 26);
             this.txtSchemaName.TabIndex = 1;
             // 
             // txtPrefix
@@ -341,7 +333,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.scMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.scMain.IsSplitterFixed = true;
-            this.scMain.Location = new System.Drawing.Point(0, 86);
+            this.scMain.Location = new System.Drawing.Point(0, 34);
             this.scMain.Name = "scMain";
             // 
             // scMain.Panel1
@@ -351,8 +343,8 @@ namespace MscrmTools.PolymorphicLookupCreator
             // scMain.Panel2
             // 
             this.scMain.Panel2.Controls.Add(this.gbRelationship);
-            this.scMain.Size = new System.Drawing.Size(2192, 1389);
-            this.scMain.SplitterDistance = 1729;
+            this.scMain.Size = new System.Drawing.Size(1526, 1004);
+            this.scMain.SplitterDistance = 1063;
             this.scMain.TabIndex = 6;
             // 
             // gbRelationship
@@ -360,10 +352,40 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.gbRelationship.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbRelationship.Location = new System.Drawing.Point(0, 0);
             this.gbRelationship.Name = "gbRelationship";
-            this.gbRelationship.Size = new System.Drawing.Size(459, 1389);
+            this.gbRelationship.Size = new System.Drawing.Size(459, 1004);
             this.gbRelationship.TabIndex = 0;
             this.gbRelationship.TabStop = false;
             this.gbRelationship.Text = "Relationship info (Select a relationship to display)";
+            // 
+            // pnlSolutionPicker
+            // 
+            this.pnlSolutionPicker.Controls.Add(this.txtSolution);
+            this.pnlSolutionPicker.Controls.Add(this.btnBrowseSolutions);
+            this.pnlSolutionPicker.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlSolutionPicker.Location = new System.Drawing.Point(203, 3);
+            this.pnlSolutionPicker.Name = "pnlSolutionPicker";
+            this.pnlSolutionPicker.Size = new System.Drawing.Size(857, 34);
+            this.pnlSolutionPicker.TabIndex = 15;
+            // 
+            // btnBrowseSolutions
+            // 
+            this.btnBrowseSolutions.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnBrowseSolutions.Location = new System.Drawing.Point(810, 0);
+            this.btnBrowseSolutions.Name = "btnBrowseSolutions";
+            this.btnBrowseSolutions.Size = new System.Drawing.Size(47, 34);
+            this.btnBrowseSolutions.TabIndex = 0;
+            this.btnBrowseSolutions.Text = "...";
+            this.btnBrowseSolutions.UseVisualStyleBackColor = true;
+            this.btnBrowseSolutions.Click += new System.EventHandler(this.btnBrowseSolutions_Click);
+            // 
+            // txtSolution
+            // 
+            this.txtSolution.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSolution.Location = new System.Drawing.Point(0, 0);
+            this.txtSolution.Name = "txtSolution";
+            this.txtSolution.ReadOnly = true;
+            this.txtSolution.Size = new System.Drawing.Size(810, 26);
+            this.txtSolution.TabIndex = 1;
             // 
             // PluginControl
             // 
@@ -373,7 +395,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.Controls.Add(this.toolStripMenu);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PluginControl";
-            this.Size = new System.Drawing.Size(1461, 983);
+            this.Size = new System.Drawing.Size(1526, 1038);
             this.Load += new System.EventHandler(this.PluginControl_Load);
             this.Resize += new System.EventHandler(this.PluginControl_Resize);
             this.toolStripMenu.ResumeLayout(false);
@@ -389,6 +411,8 @@ namespace MscrmTools.PolymorphicLookupCreator
             this.scMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).EndInit();
             this.scMain.ResumeLayout(false);
+            this.pnlSolutionPicker.ResumeLayout(false);
+            this.pnlSolutionPicker.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -404,7 +428,6 @@ namespace MscrmTools.PolymorphicLookupCreator
         private System.Windows.Forms.Label lblReferencedEntities;
         private System.Windows.Forms.Label lblLookupDisplayName;
         private System.Windows.Forms.Label lblLookupSchemaName;
-        private System.Windows.Forms.ComboBox cbbSolutions;
         private System.Windows.Forms.ComboBox cbbReferencingEntity;
         private System.Windows.Forms.TextBox txtDisplayName;
         private System.Windows.Forms.Panel pnlSchemaName;
@@ -424,5 +447,8 @@ namespace MscrmTools.PolymorphicLookupCreator
         private System.Windows.Forms.TextBox txtTableSearch;
         private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.ColumnHeader chDisplayName;
+        private System.Windows.Forms.Panel pnlSolutionPicker;
+        private System.Windows.Forms.TextBox txtSolution;
+        private System.Windows.Forms.Button btnBrowseSolutions;
     }
 }

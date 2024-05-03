@@ -252,6 +252,12 @@
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\MetadataManager.cs" />
     <Compile Include="AppCode\SolutionManager.cs" />
+    <Compile Include="Forms\SolutionPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SolutionPicker.designer.cs">
+      <DependentUpon>SolutionPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginControl.cs">
       <SubType>UserControl</SubType>
@@ -279,6 +285,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\SolutionPicker.resx">
+      <DependentUpon>SolutionPicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PluginControl.resx">
       <DependentUpon>PluginControl.cs</DependentUpon>
     </EmbeddedResource>

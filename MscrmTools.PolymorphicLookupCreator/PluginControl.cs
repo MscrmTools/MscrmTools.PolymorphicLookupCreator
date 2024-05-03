@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MscrmTools.PolymorphicLookupCreator.AppCode;
 using MscrmTools.PolymorphicLookupCreator.UserControls;
+using MsCrmTools.PolymorphicLookupCreator.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,6 @@ namespace MscrmTools.PolymorphicLookupCreator
         private MetadataManager manager;
         private List<EntityInfo> metadata;
         private List<ListViewItem> referencedTableItems;
-        private List<AppCode.SolutionInfo> solutions;
 
         public PluginControl()
         {
@@ -44,6 +44,21 @@ namespace MscrmTools.PolymorphicLookupCreator
             base.UpdateConnection(newService, detail, actionName, parameter);
 
             ResetUi(null, null);
+        }
+
+        private void btnBrowseSolutions_Click(object sender, EventArgs e)
+        {
+            using (var sp = new SolutionPicker(Service))
+            {
+                if (sp.ShowDialog(this) == DialogResult.OK)
+                {
+                    var solution = sp.SelectedSolution.First();
+                    txtSolution.Text = solution.GetAttributeValue<string>("friendlyname");
+                    txtSolution.Tag = solution;
+
+                    txtPrefix.Text = $"{solution.GetAttributeValue<AliasedValue>("pub.customizationprefix").Value}_";
+                }
+            }
         }
 
         private void cbbReferencingAttribute_SelectedIndexChanged(object sender, EventArgs e)
@@ -125,11 +140,6 @@ namespace MscrmTools.PolymorphicLookupCreator
             cbbReferencingAttribute.Items.Clear();
             cbbReferencingAttribute.Items.Add("<Create new polymorphic lookup>");
             cbbReferencingAttribute.Items.AddRange(currentEmd.Attributes.Select(a => a.SchemaName).ToArray());
-        }
-
-        private void cbbSolutions_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            txtPrefix.Text = $"{((AppCode.SolutionInfo)cbbSolutions.SelectedItem).Solution.GetAttributeValue<AliasedValue>("pub.customizationprefix").Value}_";
         }
 
         private void lvReferencedEntities_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -243,7 +253,8 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             if (!partial)
             {
-                cbbSolutions.Items.Clear();
+                txtSolution.Text = string.Empty;
+                txtSolution.Tag = null;
                 cbbReferencingEntity.Items.Clear();
             }
 
@@ -270,16 +281,9 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             WorkAsync(new WorkAsyncInfo
             {
-                Message = "Loading solutions...",
+                Message = "Loading metadata...",
                 Work = (bw, evt) =>
                 {
-                    // Reload solutions
-                    var sm = new SolutionManager(Service);
-                    solutions = sm.Load();
-
-                    bw.ReportProgress(0, "Loading metadata...");
-
-                    // Reload metadata
                     manager = new MetadataManager(Service);
                     metadata = manager.GetAvailableEntitiesForRelationship(ConnectionDetail);
                 },
@@ -295,8 +299,6 @@ namespace MscrmTools.PolymorphicLookupCreator
                     {
                         if (!partial)
                         {
-                            cbbSolutions.Items.AddRange(solutions.ToArray());
-
                             var a = metadata.Where(e => e.Metadata.CanBePrimaryEntityInRelationship.Value).Select(e => e.Metadata.SchemaName).ToArray();
                             cbbReferencingEntity.Items.AddRange(a);
 
@@ -349,7 +351,7 @@ namespace MscrmTools.PolymorphicLookupCreator
 
         private void tsbCreate_Click(object sender, EventArgs e)
         {
-            if (cbbSolutions.SelectedItem == null)
+            if (txtSolution.Tag == null)
             {
                 MessageBox.Show(this, @"Please select a solution", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -379,7 +381,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             var prefix = txtPrefix.Text;
             var display = txtDisplayName.Text;
             var schema = $"{txtPrefix.Text}{txtSchemaName.Text}";
-            var solutionUniqueName = ((AppCode.SolutionInfo)cbbSolutions.SelectedItem).Solution.GetAttributeValue<string>("uniquename");
+            var solutionUniqueName = ((Entity)txtSolution.Tag).GetAttributeValue<string>("uniquename");
 
             WorkAsync(new WorkAsyncInfo
             {
@@ -487,7 +489,7 @@ namespace MscrmTools.PolymorphicLookupCreator
             if (result == DialogResult.No) return;
 
             var prefix = txtPrefix.Text;
-            var solutionUniqueName = ((AppCode.SolutionInfo)cbbSolutions.SelectedItem).Solution.GetAttributeValue<string>("uniquename");
+            var solutionUniqueName = ((Entity)txtSolution.Tag).GetAttributeValue<string>("uniquename");
 
             WorkAsync(new WorkAsyncInfo
             {
