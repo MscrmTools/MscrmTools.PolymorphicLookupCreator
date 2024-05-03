@@ -373,7 +373,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 return;
             }
 
-            var referencing = metadata.First(m => m.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString()).Metadata.LogicalName;
+            var referencing = metadata.First(m => m.Metadata.SchemaName == cbbReferencingEntity.SelectedItem.ToString()).Metadata;
             var referenced = referencedTableItems.Where(i => i.Checked).Select(i => i.Text.ToLower()).ToArray();
             var rels = referencedTableItems.Where(i => i.Checked).Select(i => (RelationshipInfo)i.Tag).ToArray();
             var prefix = txtPrefix.Text;
@@ -386,7 +386,7 @@ namespace MscrmTools.PolymorphicLookupCreator
                 Message = "Creating Polymorphic Lookup",
                 Work = (bw, evt) =>
                 {
-                    manager.CreatePolymorphicLookup(prefix, display, schema, referencing, referenced, rels, solutionUniqueName);
+                    manager.CreatePolymorphicLookup(prefix, display, schema, referencing.LogicalName, referenced, rels, solutionUniqueName, referencing.TableType == "Elastic");
                 },
                 PostWorkCallBack = (evt) =>
                 {
