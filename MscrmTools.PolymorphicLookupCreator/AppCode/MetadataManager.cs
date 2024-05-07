@@ -142,6 +142,21 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                 omd.ReferencingEntity = emd.LogicalName;
                 omd.ReferencingAttribute = polymorphicLookupName;
 
+                if (emd.TableType == "Elastic")
+                {
+                    omd.CascadeConfiguration = new CascadeConfiguration
+                    {
+                        Archive = CascadeType.NoCascade,
+                        Assign = CascadeType.NoCascade,
+                        Delete = CascadeType.NoCascade,
+                        Merge = CascadeType.NoCascade,
+                        Reparent = CascadeType.NoCascade,
+                        RollupView = CascadeType.NoCascade,
+                        Share = CascadeType.NoCascade,
+                        Unshare = CascadeType.NoCascade,
+                    };
+                }
+
                 _service.Execute(new CreateOneToManyRequest
                 {
                     Lookup = (LookupAttributeMetadata)emd.Attributes.First(a => a.LogicalName == polymorphicLookupName.ToLower()),
@@ -181,7 +196,7 @@ namespace MscrmTools.PolymorphicLookupCreator.AppCode
                         ReferencedEntity = referencedEntity,
                     };
 
-                    if(isElasticTable)
+                    if (isElasticTable)
                     {
                         relations[i].CascadeConfiguration = new CascadeConfiguration
                         {
