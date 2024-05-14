@@ -488,6 +488,12 @@ namespace MscrmTools.PolymorphicLookupCreator
 
             if (result == DialogResult.No) return;
 
+            if (txtSolution.Tag == null)
+            {
+                MessageBox.Show(this, "Please select a solution", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var prefix = txtPrefix.Text;
             var solutionUniqueName = ((Entity)txtSolution.Tag).GetAttributeValue<string>("uniquename");
 
